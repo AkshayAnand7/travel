@@ -8,7 +8,7 @@ export async function submitBooking(formData: any) {
 
   // Insert into Supabase
   const { error } = await supabase.from('bookings').insert({
-    staff_name: formData.staffName,
+    staff_name: formData.staffName || 'Travel',
     customer_name: formData.customerName,
     customer_number: formData.customerNumber,
     vehicle: formData.vehicle,

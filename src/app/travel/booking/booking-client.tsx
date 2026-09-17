@@ -3,8 +3,8 @@ import { useState } from "react";
 import Link from "next/link";
 import StaffLayout from "@/components/StaffLayout";
 import { 
-  Calendar, User, Phone, Car, MapPin, 
-  ArrowRightLeft, CheckCircle, Loader2, AlertCircle, ChevronLeft,
+  Calendar, User, Phone, Car, 
+  ArrowRightLeft, CheckCircle, Loader2, ChevronLeft,
   Clock, Check, X as Close, IndianRupee
 } from "lucide-react";
 import { submitBooking, updateBookingStatus } from "./actions";
@@ -12,22 +12,15 @@ import { useRouter } from "next/navigation";
 
 export default function TravelBookingClient({
   initialBookings,
-  initialVehicles,
-  initialStaff,
 }: {
   initialBookings: any[];
-  initialVehicles: any[];
-  initialStaff: any[];
 }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [upcomingRides, setUpcomingRides] = useState(initialBookings);
-  const [vehicles] = useState(initialVehicles);
-  const [staff] = useState(initialStaff);
+  const [upcomingRides] = useState(initialBookings);
   const [formData, setFormData] = useState({
     date: new Date().toISOString().split('T')[0],
-    staffName: "",
     customerName: "",
     customerNumber: "",
     vehicle: "",
@@ -49,7 +42,6 @@ export default function TravelBookingClient({
     e.preventDefault();
     setLoading(true);
     const result = await submitBooking(formData);
-    setLoading(true); // Wait for revalidation
     if (result.success) {
       setSuccess(true);
       router.refresh();
@@ -67,7 +59,7 @@ export default function TravelBookingClient({
           <h2 className="text-2xl font-bold text-text-primary">Booking Saved!</h2>
           <p className="text-text-secondary mt-2">The trip booking has been saved as PENDING.</p>
           <div className="mt-10 space-y-3">
-            <button onClick={() => { setSuccess(false); setFormData({...formData, customerName: "", customerNumber: "", fromLocation: "", toLocation: "", totalAmount: "", receivedAmount: "", remark: "", amount: ""}) }} className="w-full py-4 bg-primary text-white rounded-2xl font-bold shadow-lg shadow-primary/20 cursor-pointer">
+            <button onClick={() => { setSuccess(false); setFormData({...formData, customerName: "", customerNumber: "", fromLocation: "", toLocation: "", totalAmount: "", receivedAmount: "", remark: "", amount: "", vehicle: ""}) }} className="w-full py-4 bg-primary text-white rounded-2xl font-bold shadow-lg shadow-primary/20 cursor-pointer">
               New Booking
             </button>
             <Link href="/travel/trips" className="block w-full py-4 bg-page text-text-secondary border border-border rounded-2xl font-bold text-center">
@@ -90,36 +82,17 @@ export default function TravelBookingClient({
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Date & Staff */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-text-muted ml-1">Date</label>
-              <div className="relative">
-                <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-primary" />
-                <input type="date" required value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})} className="w-full h-12 pl-11 pr-4 bg-surface border border-border rounded-2xl text-sm font-bold focus:border-primary outline-none transition-all" />
-              </div>
-            </div>
-            <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-text-muted ml-1">Staff Name</label>
-              <div className="relative">
-                <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-primary" />
-                <select 
-                  required 
-                  value={formData.staffName} 
-                  onChange={e => setFormData({...formData, staffName: e.target.value})} 
-                  className="w-full h-12 pl-11 pr-4 bg-surface border border-border rounded-2xl text-sm font-bold appearance-none focus:border-primary outline-none transition-all cursor-pointer"
-                >
-                  <option value="">Select Staff</option>
-                  {staff.map(s => (
-                    <option key={s.id} value={s.full_name}>{s.full_name}</option>
-                  ))}
-                </select>
-              </div>
+          {/* Date */}
+          <div className="space-y-2">
+            <label className="text-[10px] font-black uppercase tracking-widest text-text-muted ml-1">Date</label>
+            <div className="relative">
+              <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-primary" />
+              <input type="date" required value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})} className="w-full h-12 pl-11 pr-4 bg-surface border border-border rounded-2xl text-sm font-bold focus:border-primary outline-none transition-all" />
             </div>
           </div>
 
           <div className="space-y-4 p-4 bg-primary/5 rounded-3xl border border-primary/10">
-             <div className="space-y-2">
+            <div className="space-y-2">
               <label className="text-[10px] font-black uppercase tracking-widest text-text-muted ml-1">Customer Name</label>
               <div className="relative">
                 <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
@@ -169,24 +142,21 @@ export default function TravelBookingClient({
               <label className="text-[10px] font-black uppercase tracking-widest text-text-muted ml-1">Vehicle</label>
               <div className="relative">
                 <Car className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-primary" />
-                <select 
-                  required 
+                <input 
+                  type="text"
+                  required
+                  placeholder="Enter vehicle (e.g. Innova / KL 58 AB 1234)"
                   value={formData.vehicle} 
                   onChange={e => setFormData({...formData, vehicle: e.target.value})} 
-                  className="w-full h-12 pl-11 pr-4 bg-surface border border-border rounded-2xl text-sm font-bold appearance-none focus:border-primary outline-none transition-all cursor-pointer"
-                >
-                  <option value="">Select Vehicle</option>
-                  {vehicles.map(v => (
-                    <option key={v.id} value={v.vehicle_number}>{v.vehicle_number} ({v.model || 'Winger'})</option>
-                  ))}
-                </select>
+                  className="w-full h-12 pl-11 pr-4 bg-surface border border-border rounded-2xl text-sm font-bold focus:border-primary outline-none transition-all"
+                />
               </div>
             </div>
             <div className="space-y-2">
               <label className="text-[10px] font-black uppercase tracking-widest text-text-muted ml-1">Trip Type</label>
               <div className="relative">
                 <ArrowRightLeft className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-primary" />
-                <select value={formData.tripType} onChange={e => setFormData({...formData, tripType: e.target.value})} className="w-full h-12 pl-11 pr-4 bg-surface border border-border rounded-2xl text-sm font-bold appearance-none focus:border-primary outline-none transition-all">
+                <select value={formData.tripType} onChange={e => setFormData({...formData, tripType: e.target.value})} className="w-full h-12 pl-11 pr-4 bg-surface border border-border rounded-2xl text-sm font-bold appearance-none focus:border-primary outline-none transition-all cursor-pointer">
                   <option value="one-side">One Side</option>
                   <option value="round">Round Trip</option>
                 </select>
@@ -207,7 +177,7 @@ export default function TravelBookingClient({
             </div>
           </div>
 
-          <button type="submit" disabled={loading} className="w-full py-4 bg-primary text-white rounded-2xl font-black shadow-xl shadow-primary/30 flex items-center justify-center gap-3 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50">
+          <button type="submit" disabled={loading} className="w-full py-4 bg-primary text-white rounded-2xl font-black shadow-xl shadow-primary/30 flex items-center justify-center gap-3 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 cursor-pointer">
             {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : "Save Booking"}
           </button>
         </form>
@@ -264,13 +234,13 @@ export default function TravelBookingClient({
                     <div className="flex gap-2">
                       <button 
                         onClick={() => handleStatusUpdate(ride.id, 'rejected')}
-                        className="p-2 bg-danger-subtle text-danger rounded-xl hover:bg-danger hover:text-white transition-all"
+                        className="p-2 bg-danger-subtle text-danger rounded-xl hover:bg-danger hover:text-white transition-all cursor-pointer"
                       >
                         <Close className="w-5 h-5" />
                       </button>
                       <button 
                         onClick={() => handleStatusUpdate(ride.id, 'accepted')}
-                        className="p-2 bg-success-subtle text-success rounded-xl hover:bg-success hover:text-white transition-all"
+                        className="p-2 bg-success-subtle text-success rounded-xl hover:bg-success hover:text-white transition-all cursor-pointer"
                       >
                         <Check className="w-5 h-5" />
                       </button>

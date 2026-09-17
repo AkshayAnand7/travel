@@ -3,33 +3,25 @@ import { useState } from "react";
 import Link from "next/link";
 import StaffLayout from "@/components/StaffLayout";
 import { 
-  Bus, MapPin, ArrowRight, IndianRupee, 
+  Bus, ArrowRight, IndianRupee, 
   Calendar, CheckCircle, Loader2, Save, X,
-  FileText, Plus, ChevronRight, History
+  Plus, History, User, Car
 } from "lucide-react";
 import { submitTrip } from "./actions";
 import { useRouter } from "next/navigation";
 
 export default function TravelTripClient({
   initialTrips,
-  initialVehicles,
-  initialStaff,
 }: {
   initialTrips: any[];
-  initialVehicles: any[];
-  initialStaff: any[];
 }) {
   const router = useRouter();
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [trips] = useState(initialTrips);
-  const [vehicles] = useState(initialVehicles);
-  const [staff] = useState(initialStaff);
   const [form, setForm] = useState({
     date: new Date().toISOString().split('T')[0],
-    staffName: "",
-    driverName: "",
     customerName: "",
     vehicle: "",
     from: "",
@@ -38,8 +30,6 @@ export default function TravelTripClient({
     amount: "",
     received: ""
   });
-
-
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -82,7 +72,7 @@ export default function TravelTripClient({
                       <span className="text-xs font-black text-text-primary uppercase">{trip.from_location} - {trip.to_location}</span>
                       <span className="px-2 py-0.5 bg-page text-travel text-[8px] font-black rounded-full border border-travel/10 uppercase">{trip.vehicle}</span>
                     </div>
-                    <p className="text-[10px] font-bold text-text-muted">{new Date(trip.date).toLocaleDateString()} • {trip.staff_name || 'Travel'}</p>
+                    <p className="text-[10px] font-bold text-text-muted">{new Date(trip.date).toLocaleDateString()} {trip.customer_name ? `• ${trip.customer_name}` : ''}</p>
                   </div>
                   <div className="text-right">
                     <p className="text-sm font-black text-emerald-600 font-mono-nums">₹{(trip.total_amount || trip.received_amount || 0).toLocaleString()}</p>
@@ -93,7 +83,7 @@ export default function TravelTripClient({
               
               {trips.length === 0 && (
                 <div className="py-12 text-center text-text-muted text-sm italic">
-                  No trips recorded yet. Accept a booking to see it here!
+                  No trips recorded yet.
                 </div>
               )}
             </div>
@@ -124,40 +114,28 @@ export default function TravelTripClient({
               <h2 className="text-sm font-black text-text-primary uppercase tracking-widest flex items-center gap-2">
                 <Bus className="w-4 h-4 text-travel" /> New Trip Details
               </h2>
-              <button onClick={() => setShowForm(false)} className="p-2 text-text-muted hover:text-danger">
+              <button onClick={() => setShowForm(false)} className="p-2 text-text-muted hover:text-danger cursor-pointer">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <div className="bg-surface p-6 rounded-3xl border border-border shadow-xl">
               <form onSubmit={handleSubmit} className="space-y-5">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] font-black text-text-muted uppercase tracking-widest ml-1">Staff Name</label>
-                    <select 
-                      required 
-                      value={form.staffName}
-                      onChange={e => setForm({ ...form, staffName: e.target.value })}
-                      className="w-full h-12 px-3 bg-page border border-border rounded-xl text-sm font-bold focus:outline-none focus:border-travel cursor-pointer transition-all"
-                    >
-                      <option value="">Select Staff...</option>
-                      {staff.map(s => (
-                        <option key={s.id} value={s.full_name}>{s.full_name}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] font-black text-text-muted uppercase tracking-widest ml-1">Customer Name</label>
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-black text-text-muted uppercase tracking-widest ml-1">Customer Name</label>
+                  <div className="relative">
+                    <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
                     <input 
                       required 
                       placeholder="Enter customer name" 
                       value={form.customerName}
                       onChange={e => setForm({ ...form, customerName: e.target.value })}
-                      className="w-full h-12 px-4 bg-page border border-border rounded-xl text-sm font-bold focus:outline-none focus:border-travel" 
+                      className="w-full h-12 pl-11 pr-4 bg-page border border-border rounded-xl text-sm font-bold focus:outline-none focus:border-travel" 
                     />
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
                     <label className="text-[10px] font-black text-text-muted uppercase tracking-widest ml-1">Date</label>
                     <input 
@@ -182,29 +160,18 @@ export default function TravelTripClient({
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-black text-text-muted uppercase tracking-widest ml-1">Driver Name</label>
-                  <input 
-                    required 
-                    placeholder="Enter driver name" 
-                    value={form.driverName}
-                    onChange={e => setForm({ ...form, driverName: e.target.value })}
-                    className="w-full h-12 px-4 bg-page border border-border rounded-xl text-sm font-bold focus:outline-none focus:border-travel" 
-                  />
-                </div>
-
-                <div className="space-y-1.5">
                   <label className="text-[10px] font-black text-text-muted uppercase tracking-widest ml-1">Vehicle</label>
-                  <select 
-                    required 
-                    value={form.vehicle}
-                    onChange={e => setForm({ ...form, vehicle: e.target.value })}
-                    className="w-full h-12 px-3 bg-page border border-border rounded-xl text-sm font-bold focus:outline-none focus:border-travel cursor-pointer"
-                  >
-                    <option value="">Select vehicle...</option>
-                    {vehicles.map(v => (
-                      <option key={v.id} value={v.vehicle_number}>{v.vehicle_number} ({v.model || 'Winger'})</option>
-                    ))}
-                  </select>
+                  <div className="relative">
+                    <Car className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-travel" />
+                    <input 
+                      type="text"
+                      required 
+                      placeholder="Enter vehicle (e.g. Innova / KL 58 AB 1234)" 
+                      value={form.vehicle}
+                      onChange={e => setForm({ ...form, vehicle: e.target.value })}
+                      className="w-full h-12 pl-11 pr-4 bg-page border border-border rounded-xl text-sm font-bold focus:outline-none focus:border-travel" 
+                    />
+                  </div>
                 </div>
 
                 <div className="space-y-1.5">
@@ -246,7 +213,7 @@ export default function TravelTripClient({
               <CheckCircle className="w-10 h-10 text-emerald-600" />
             </div>
             <h2 className="text-2xl font-black text-text-primary uppercase tracking-tight">Record Saved</h2>
-            <p className="text-text-secondary text-sm font-medium mt-2">The trip has been securely locked.</p>
+            <p className="text-text-secondary text-sm font-medium mt-2">The trip has been securely saved.</p>
           </div>
         )}
 

@@ -2,28 +2,23 @@
 import { useState } from "react";
 import StaffLayout from "@/components/StaffLayout";
 import { 
-  Fuel, Wrench, IndianRupee, Calendar, 
+  Fuel, IndianRupee, 
   CheckCircle, Loader2, Save, X, Plus, 
-  History, Bus, Wallet
+  Wallet, Car
 } from "lucide-react";
-
 import { submitExpense } from "./actions";
 
 export default function VehicleExpensePage({
   initialExpenses,
-  initialVehicles,
 }: {
   initialExpenses: any[];
-  initialVehicles: any[];
 }) {
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [expenses, setExpenses] = useState(initialExpenses);
-  const [vehicles] = useState(initialVehicles);
   const [form, setForm] = useState({
     date: new Date().toISOString().split('T')[0],
-    staffName: "",
     vehicle: "",
     category: "Fuel",
     amount: "",
@@ -69,7 +64,7 @@ export default function VehicleExpensePage({
                       <span className="text-xs font-black text-text-primary uppercase">{exp.category}</span>
                       <span className="px-2 py-0.5 bg-page text-travel text-[8px] font-black rounded-full border border-travel/10 uppercase">{exp.vehicle}</span>
                     </div>
-                    <p className="text-[10px] font-bold text-text-muted">{new Date(exp.date).toLocaleDateString()} • {exp.staff_name || 'Staff'}</p>
+                    <p className="text-[10px] font-bold text-text-muted">{new Date(exp.date).toLocaleDateString()}</p>
                   </div>
                   <div className="text-right">
                     <p className="text-sm font-black text-danger font-mono-nums">₹{Number(exp.amount).toLocaleString()}</p>
@@ -99,7 +94,7 @@ export default function VehicleExpensePage({
               <h2 className="text-sm font-black text-text-primary uppercase tracking-widest flex items-center gap-2">
                 <Fuel className="w-4 h-4 text-travel" /> New Expense Record
               </h2>
-              <button onClick={() => setShowForm(false)} className="p-2 text-text-muted hover:text-danger">
+              <button onClick={() => setShowForm(false)} className="p-2 text-text-muted hover:text-danger cursor-pointer">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -107,29 +102,18 @@ export default function VehicleExpensePage({
             <div className="bg-surface p-6 rounded-3xl border border-border shadow-xl">
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-black text-text-muted uppercase tracking-widest ml-1">Staff Name</label>
-                  <input 
-                    type="text" 
-                    required 
-                    placeholder="Reporting staff name" 
-                    value={form.staffName}
-                    onChange={e => setForm({ ...form, staffName: e.target.value })}
-                    className="w-full h-12 px-4 bg-page border border-border rounded-xl text-sm font-bold focus:outline-none focus:border-travel transition-all"
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <label className="text-[10px] font-black text-text-muted uppercase tracking-widest ml-1">Vehicle Number</label>
-                  <select 
-                    required 
-                    value={form.vehicle}
-                    onChange={e => setForm({ ...form, vehicle: e.target.value })}
-                    className="w-full h-12 px-4 bg-page border border-border rounded-xl text-sm font-bold focus:outline-none focus:border-travel cursor-pointer"
-                  >
-                    <option value="">Select vehicle...</option>
-                    {vehicles.map(v => (
-                      <option key={v.id} value={v.vehicle_number}>{v.vehicle_number} ({v.model || 'Winger'})</option>
-                    ))}
-                  </select>
+                  <label className="text-[10px] font-black text-text-muted uppercase tracking-widest ml-1">Vehicle</label>
+                  <div className="relative">
+                    <Car className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-travel" />
+                    <input 
+                      type="text"
+                      required 
+                      placeholder="Enter vehicle (e.g. Innova / KL 58 AB 1234)" 
+                      value={form.vehicle}
+                      onChange={e => setForm({ ...form, vehicle: e.target.value })}
+                      className="w-full h-12 pl-11 pr-4 bg-page border border-border rounded-xl text-sm font-bold focus:outline-none focus:border-travel transition-all"
+                    />
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

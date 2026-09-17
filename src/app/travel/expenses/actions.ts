@@ -19,7 +19,7 @@ export async function submitExpense(formData: any) {
     category: formData.category.toLowerCase(),
     amount: Number(formData.amount),
     description: formData.description,
-    staff_name: formData.staffName,
+    staff_name: formData.staffName || 'Travel',
     module: 'travel',
     created_at: new Date().toISOString()
   })
@@ -30,7 +30,7 @@ export async function submitExpense(formData: any) {
   await supabase.from('notifications').insert({
     type: 'alert',
     title: 'New Expense Reported',
-    message: `${formData.category} expense of ₹${formData.amount} reported for ${formData.vehicle} by ${formData.staffName}.`,
+    message: `${formData.category} expense of ₹${formData.amount} reported for ${formData.vehicle}.`,
     created_at: new Date().toISOString()
   })
 

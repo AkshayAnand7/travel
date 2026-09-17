@@ -54,7 +54,7 @@ export async function submitTrip(formData: any) {
     date: formData.date,
     driver_id: null,
     vehicle_id: null,
-    driver_name: formData.driverName,
+    driver_name: formData.driverName || null,
     customer_name: formData.customerName,
     from_location: formData.from,
     to_location: formData.to,
@@ -62,7 +62,7 @@ export async function submitTrip(formData: any) {
     received_amount: Number(formData.received),
     trip_type: formData.type,
     is_locked: false,
-    staff_name: formData.staffName,
+    staff_name: formData.staffName || 'Travel',
     vehicle: formData.vehicle,
     created_at: new Date().toISOString()
   })
@@ -73,7 +73,7 @@ export async function submitTrip(formData: any) {
   await supabase.from('notifications').insert({
     type: 'travel',
     title: 'New Trip Reported',
-    message: `${formData.from} to ${formData.to} trip submitted by ${formData.staffName}. Amount: ₹${formData.received}`,
+    message: `${formData.from} to ${formData.to} trip submitted for ${formData.vehicle}. Amount: ₹${formData.received}`,
     created_at: new Date().toISOString()
   })
 

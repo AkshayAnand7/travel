@@ -1,20 +1,14 @@
-import { getTrips, getVehicles, getUsers } from "./actions";
+import { getTrips } from "./actions";
 import TravelTripClient from "./trips-client";
 
 export const dynamic = 'force-dynamic';
 
 export default async function TravelTripPage() {
-  const [trips, vehicles, staff] = await Promise.all([
-    getTrips(),
-    getVehicles(),
-    getUsers(),
-  ]);
+  const trips = await getTrips();
 
   return (
     <TravelTripClient
       initialTrips={trips}
-      initialVehicles={vehicles}
-      initialStaff={staff}
     />
   );
 }
