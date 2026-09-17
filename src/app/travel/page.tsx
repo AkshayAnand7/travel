@@ -1,29 +1,22 @@
 import Link from "next/link";
 import StaffLayout from "@/components/StaffLayout";
-import { PlusCircle, FileText, Wallet, Calendar } from "lucide-react";
+import { PlusCircle, Wallet } from "lucide-react";
 
 export default function StaffTravelDashboard() {
   const menuItems = [
     {
-      title: "New Booking",
-      desc: "Schedule a future trip",
-      icon: Calendar,
-      href: "/travel/booking",
-      color: "bg-blue-500"
-    },
-    {
       title: "New Trip",
-      desc: "Start a current trip log",
+      desc: "Record a current trip log",
       icon: PlusCircle,
       href: "/travel/trips",
-      color: "bg-green-500"
+      color: "bg-emerald-600"
     },
     {
       title: "Add Expense",
       desc: "Fuel & maintenance",
       icon: Wallet,
       href: "/travel/expenses",
-      color: "bg-orange-500"
+      color: "bg-amber-500"
     }
   ];
 
