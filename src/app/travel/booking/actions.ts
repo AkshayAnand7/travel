@@ -1,0 +1,85 @@
+'use server'
+
+import { createAdminClient } from '@/lib/supabase'
+import { revalidatePath } from 'next/cache'
+
+export async function submitBooking(formData: any) {
+  const supabase = createAdminClient()
+
+  // Insert into Supabase
+  const { error } = await supabase.from('bookings').insert({
+    staff_name: formData.staffName,
+    customer_name: formData.customerName,
+    customer_number: formData.customerNumber,
+    vehicle: formData.vehicle,
+    from_location: formData.fromLocation,
+    to_location: formData.toLocation,
+    trip_type: formData.tripType,
+    total_amount: Number(formData.totalAmount) || 0,
+    received_amount: Number(formData.receivedAmount) || 0,
+    remark: formData.remark || "",
+    amount: Number(formData.amount) || 0,
+    status: 'pending',
+    date: formData.date || new Date().toISOString().split('T')[0]
+  })
+
+  if (error) return { error: error.message }
+
+  revalidatePath('/travel/booking')
+  return { success: true }
+}
+
+export async function getBookings() {
+  const supabase = createAdminClient()
+
+  const { data, error } = await supabase
+    .from('bookings')
+    .select('*')
+    .order('created_at', { ascending: false })
+
+  if (error) return []
+  return data || []
+}
+
+export async function updateBookingStatus(id: number, status: string) {
+  const supabase = createAdminClient()
+
+  // 1. Update Booking Status
+  const { data: booking, error: fetchError } = await supabase
+    .from('bookings')
+    .select('*')
+    .eq('id', id)
+    .single()
+
+  if (fetchError) return { error: fetchError.message }
+
+  const { error: updateError } = await supabase
+    .from('bookings')
+    .update({ status })
+    .eq('id', id)
+
+  if (updateError) return { error: updateError.message }
+
+  // 2. If accepted, create a TRIP record automatically
+  if (status === 'accepted') {
+    const { error: tripError } = await supabase
+      .from('trips')
+      .insert({
+        date: booking.date,
+        staff_name: booking.staff_name,
+        vehicle: booking.vehicle,
+        from_location: booking.from_location,
+        to_location: booking.to_location,
+        trip_type: booking.trip_type,
+        total_amount: booking.total_amount || 0,
+        received_amount: booking.received_amount || 0,
+        status: 'active'
+      })
+
+    if (tripError) console.error("Failed to create trip record:", tripError)
+  }
+  
+  revalidatePath('/travel/booking')
+  revalidatePath('/travel/trips')
+  return { success: true }
+}
