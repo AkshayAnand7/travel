@@ -2,7 +2,7 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { 
-  LogOut, Bus, Fuel
+  LogOut, Bus, Fuel, LayoutDashboard
 } from "lucide-react";
 import { signOut } from "next-auth/react";
 
@@ -15,11 +15,17 @@ export default function StaffLayout({ children, shopName }: StaffLayoutProps) {
   const pathname = usePathname();
 
   const navItems = [
+    { name: "Dashboard", href: `/travel`, icon: LayoutDashboard },
     { name: "Trips", href: `/travel/trips`, icon: Bus },
     { name: "Expenses", href: `/travel/expenses`, icon: Fuel },
   ];
 
-  const isActive = (href: string) => pathname === href;
+  const isActive = (href: string) => {
+    if (href === "/travel") {
+      return pathname === "/travel";
+    }
+    return pathname.startsWith(href);
+  };
 
   return (
     <div className="min-h-screen bg-page flex flex-col">
@@ -58,7 +64,7 @@ export default function StaffLayout({ children, shopName }: StaffLayoutProps) {
           <Link 
             key={item.href}
             href={item.href}
-            className={`flex flex-col items-center gap-1 px-8 py-2 transition-all duration-150 ${
+            className={`flex flex-col items-center gap-1 px-5 py-2 transition-all duration-150 ${
               isActive(item.href) ? "text-primary" : "text-text-muted hover:text-text-secondary"
             }`}
           >
