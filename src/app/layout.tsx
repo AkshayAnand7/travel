@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import AuthProvider from "@/components/AuthProvider";
 import DisableNumberScroll from "@/components/DisableNumberScroll";
+import { Outfit, JetBrains_Mono } from "next/font/google";
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -13,12 +14,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: "Travel Management System",
   description: "Secure travel management platform with fleet management, trip tracking, booking, expenses, and daily reporting.",
-  icons: {
-    icon: '/favicon.png?v=2',
-    apple: '/favicon.png?v=2',
-  },
 };
-import { Outfit, JetBrains_Mono } from "next/font/google";
 
 const outfit = Outfit({ 
   subsets: ["latin"], 
