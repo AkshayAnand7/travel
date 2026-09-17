@@ -17,6 +17,7 @@ const USERS = [
 export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
   trustHost: true,
+  secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET || 'travel-portal-secret-key-2026',
   providers: [
     Credentials({
       async authorize(credentials) {
@@ -25,28 +26,15 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           const password = credentials?.password as string
 
           if (!user_id || !password) {
-            console.log('[AUTH] Missing credentials')
             return null
           }
 
           const user = USERS.find(u => u.user_id === user_id)
 
-          if (!user) {
-            console.log('[AUTH] User not found:', user_id)
+          if (!user || !user.is_active || password !== user.password) {
             return null
           }
 
-          if (!user.is_active) {
-            console.log('[AUTH] User disabled:', user_id)
-            return null
-          }
-
-          if (password !== user.password) {
-            console.log('[AUTH] Wrong password for:', user_id)
-            return null
-          }
-
-          console.log('[AUTH] Login success:', user_id, user.role)
           return {
             id: user.id,
             user_id: user.user_id,
@@ -54,7 +42,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             role: user.role,
           }
         } catch (err) {
-          console.error('[AUTH] Unexpected error:', err)
+          console.error('[AUTH] Error in authorize:', err)
           return null
         }
       },

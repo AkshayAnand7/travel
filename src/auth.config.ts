@@ -4,17 +4,12 @@ export const authConfig = {
   pages: {
     signIn: '/login',
   },
+  secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET || 'travel-portal-secret-key-2026',
+  trustHost: true,
   session: {
     strategy: 'jwt',
   },
   callbacks: {
-    authorized({ auth, request: { nextUrl } }) {
-      // Let ALL requests through to the middleware handler.
-      // The middleware's auth() wrapper handles route protection
-      // with proper role-based checks and redirects.
-      // Returning true here means "allow the request to proceed to middleware".
-      return true
-    },
     jwt({ token, user }) {
       if (user) {
         token.id = user.id
@@ -32,5 +27,5 @@ export const authConfig = {
       return session
     },
   },
-  providers: [], // Configured in auth.ts
+  providers: [],
 } satisfies NextAuthConfig

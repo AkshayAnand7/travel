@@ -4,37 +4,33 @@ import { NextResponse } from 'next/server'
 
 const { auth } = NextAuth(authConfig)
 
-// All protected route prefixes
-const PROTECTED_PREFIXES = ['/travel']
-
 export default auth((req) => {
   const { nextUrl } = req
   const isLoggedIn = !!req.auth
   const path = nextUrl.pathname
 
-  const isOnLogin = path === '/login'
+  const isProtected = path.startsWith('/travel')
+  const isLoginPage = path === '/login'
 
-  // --- LOGIN PAGE LOGIC ---
-  if (isOnLogin) {
+  // Root redirect
+  if (path === '/') {
     if (isLoggedIn) {
-      const callbackUrl = nextUrl.searchParams.get('callbackUrl')
-      if (callbackUrl && callbackUrl.startsWith('/travel')) {
-        return NextResponse.redirect(new URL(callbackUrl, nextUrl))
-      }
+      return NextResponse.redirect(new URL('/travel', nextUrl))
+    }
+    return NextResponse.redirect(new URL('/login', nextUrl))
+  }
+
+  // If already logged in and visiting /login -> send to /travel
+  if (isLoginPage) {
+    if (isLoggedIn) {
       return NextResponse.redirect(new URL('/travel', nextUrl))
     }
     return NextResponse.next()
   }
 
-  // --- PROTECTED ROUTES LOGIC ---
-  const isProtectedRoute = PROTECTED_PREFIXES.some(prefix => path.startsWith(prefix))
-
-  if (isProtectedRoute) {
-    if (!isLoggedIn) {
-      const loginUrl = new URL('/login', nextUrl)
-      loginUrl.searchParams.set('callbackUrl', path)
-      return NextResponse.redirect(loginUrl)
-    }
+  // If not logged in and visiting protected /travel route -> send to /login
+  if (isProtected && !isLoggedIn) {
+    return NextResponse.redirect(new URL('/login', nextUrl))
   }
 
   return NextResponse.next()
@@ -42,7 +38,9 @@ export default auth((req) => {
 
 export const config = {
   matcher: [
-    '/travel/:path*',
+    '/',
     '/login',
+    '/travel',
+    '/travel/:path*',
   ],
 }
