@@ -138,6 +138,9 @@ export function getFriendlyAuthErrorMessage(error: unknown): string {
       return 'Password should be at least 6 characters long.'
     case 'auth/operation-not-allowed':
       return 'Email/Password sign-in is currently disabled in your Firebase project. Please enable it in Firebase Console → Authentication → Sign-in method.'
+    case 'auth/api-key-not-valid':
+    case 'auth/invalid-api-key':
+      return 'Firebase API Key is invalid or expired. Please check your project settings.'
     case 'auth/network-request-failed':
       return 'Network connection error. Please check your internet connectivity.'
     default:
