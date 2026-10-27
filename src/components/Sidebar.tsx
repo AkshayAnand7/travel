@@ -114,7 +114,7 @@ export default function Sidebar({
                   transition-all duration-150 group relative
                   ${
                     active
-                      ? "bg-blue-600 text-white font-semibold shadow-xs"
+                      ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold shadow-md shadow-blue-500/25 border border-blue-400/30"
                       : "text-slate-400 hover:text-slate-100 hover:bg-white/[0.06]"
                   }
                   ${collapsed ? "justify-center" : ""}
@@ -156,21 +156,30 @@ export default function Sidebar({
         </div>
 
         {/* Bottom operational status */}
-        {!collapsed && (
-          <div className="px-4 py-3 border-t border-slate-800/80 bg-slate-950/40">
-            <div className="flex items-center gap-2">
-              <span className="relative flex h-2 w-2">
+        <div className="px-3.5 py-3 border-t border-slate-800/80 bg-slate-950/40">
+          {!collapsed ? (
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                </span>
+                <span className="text-[11px] font-medium text-slate-300">System Connected</span>
+              </div>
+              <div className="flex items-center gap-1.5 text-[10px] text-slate-500 mt-0.5">
+                <ShieldCheck className="w-3 h-3 text-slate-500" />
+                <span>Fleet Operations v0.1.0</span>
+              </div>
+            </div>
+          ) : (
+            <div className="flex justify-center" title="System Connected (v0.1.0)">
+              <span className="relative flex h-2.5 w-2.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
               </span>
-              <span className="text-[11px] font-medium text-slate-300">System Connected</span>
             </div>
-            <div className="flex items-center gap-1.5 text-[10px] text-slate-500 mt-0.5">
-              <ShieldCheck className="w-3 h-3 text-slate-500" />
-              <span>Fleet Operations v0.1.0</span>
-            </div>
-          </div>
-        )}
+          )}
+        </div>
       </aside>
     </>
   );
