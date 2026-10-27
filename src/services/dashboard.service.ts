@@ -4,16 +4,28 @@ import { getPayments } from './payments.service'
 import { getExpenses } from './expenses.service'
 import type { DashboardMetrics, Trip } from '@/types'
 
+async function withTimeout<T>(promise: Promise<T>, ms: number, fallback: T): Promise<T> {
+  let timer: NodeJS.Timeout;
+  const timeoutPromise = new Promise<T>((resolve) => {
+    timer = setTimeout(() => resolve(fallback), ms);
+  });
+  try {
+    return await Promise.race([promise, timeoutPromise]);
+  } finally {
+    clearTimeout(timer!);
+  }
+}
+
 export async function getDashboardData(): Promise<{
   metrics: DashboardMetrics
   recentTrips: Trip[]
 }> {
   try {
     const [trips, vehicles, payments, expenses] = await Promise.all([
-      getTrips(100),
-      getVehicles(100),
-      getPayments(100),
-      getExpenses(100),
+      withTimeout(getTrips(100), 2000, []),
+      withTimeout(getVehicles(100), 2000, []),
+      withTimeout(getPayments(100), 2000, []),
+      withTimeout(getExpenses(100), 2000, []),
     ])
 
     const todayStr = new Date().toISOString().split('T')[0]

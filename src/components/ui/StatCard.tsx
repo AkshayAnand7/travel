@@ -35,7 +35,7 @@ export default function StatCard({
   };
 
   return (
-    <div className="group relative flex flex-col justify-between overflow-hidden rounded-2xl bg-white/80 backdrop-blur-xl border border-white/90 shadow-[0_4px_20px_-2px_rgba(15,23,42,0.04),0_1px_3px_0_rgba(15,23,42,0.02)] p-5 transition-all duration-300 hover:shadow-[0_12px_28px_-4px_rgba(15,23,42,0.08)] hover:-translate-y-0.5 hover:bg-white/92 hover:border-slate-200">
+    <div className="group relative flex flex-col justify-between overflow-hidden rounded-2xl bg-white border border-slate-200/90 shadow-[0_4px_16px_-2px_rgba(15,23,42,0.04),0_1px_3px_0_rgba(15,23,42,0.02)] p-5 transition-all duration-200 hover:shadow-[0_10px_24px_-4px_rgba(15,23,42,0.08)] hover:-translate-y-0.5 hover:border-slate-300">
       {/* Top subtle accent glow stripe */}
       <div className={`absolute top-0 inset-x-0 h-[2.5px] bg-gradient-to-r ${getAccentGradient()}`} />
 
@@ -49,7 +49,7 @@ export default function StatCard({
           </p>
         </div>
         <div
-          className={`w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 border border-white/80 shadow-xs backdrop-blur-md transition-all duration-300 group-hover:scale-110 group-hover:rotate-2 ${iconBg}`}
+          className={`w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 border border-slate-200/60 shadow-xs transition-transform duration-200 group-hover:scale-105 ${iconBg}`}
         >
           <Icon className={`w-5 h-5 ${iconColor}`} />
         </div>
