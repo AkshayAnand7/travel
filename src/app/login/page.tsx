@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import {
   ShieldCheck, Lock, Eye, EyeOff,
   ChevronRight, Loader2, User, AlertCircle,
-  Bus, CheckCircle2, ArrowLeft, KeyRound
+  Bus, CheckCircle2, ArrowLeft, KeyRound, UserPlus
 } from "lucide-react"
 import { useAuth } from "@/lib/firebase/AuthContext"
 import { getFriendlyAuthErrorMessage } from "@/lib/firebase/auth"
@@ -13,7 +13,7 @@ import { getFriendlyAuthErrorMessage } from "@/lib/firebase/auth"
 function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const { signIn, resetPassword, user } = useAuth()
+  const { signIn, signUp, resetPassword, user } = useAuth()
 
   const [loading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
@@ -24,9 +24,11 @@ function LoginForm() {
 
   const [userId, setUserId] = useState("")
   const [password, setPassword] = useState("")
+  const [displayName, setDisplayName] = useState("")
   const [error, setError] = useState(initialError)
   const [successMessage, setSuccessMessage] = useState("")
   const [isResetMode, setIsResetMode] = useState(false)
+  const [isRegisterMode, setIsRegisterMode] = useState(false)
   const [resetEmail, setResetEmail] = useState("")
 
   const callbackUrl = searchParams.get("callbackUrl") || "/travel"
@@ -51,6 +53,25 @@ function LoginForm() {
       window.location.replace(destination)
     } catch (err: unknown) {
       console.error("Login error:", err)
+      setError(getFriendlyAuthErrorMessage(err))
+      setLoading(false)
+    }
+  }
+
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    setError("")
+    setSuccessMessage("")
+
+    try {
+      const email = userId.includes("@") ? userId : `${userId.toLowerCase()}@rktravelhub.com`
+      const name = displayName || userId.toUpperCase()
+      await signUp(email, password, name, "admin")
+      const destination = callbackUrl.startsWith("/travel") ? callbackUrl : "/travel"
+      window.location.replace(destination)
+    } catch (err: unknown) {
+      console.error("Registration error:", err)
       setError(getFriendlyAuthErrorMessage(err))
       setLoading(false)
     }
@@ -92,11 +113,13 @@ function LoginForm() {
             </div>
             <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-1">Fleet Operations</p>
             <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-slate-900">
-              {isResetMode ? "Reset Password" : "Travel Portal"}
+              {isResetMode ? "Reset Password" : isRegisterMode ? "Register Account" : "Travel Portal"}
             </h2>
             <p className="text-xs text-text-muted mt-1">
               {isResetMode
                 ? "Enter your User ID or email to receive reset instructions"
+                : isRegisterMode
+                ? "Create an administrator account for RK Travel Hub"
                 : "Enter your credentials to access the management portal"}
             </p>
           </div>
@@ -155,6 +178,88 @@ function LoginForm() {
               >
                 <ArrowLeft className="w-3.5 h-3.5" /> Back to Sign In
               </button>
+            </form>
+          ) : isRegisterMode ? (
+            /* Register Mode */
+            <form onSubmit={handleRegister} className="space-y-5 relative z-10">
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-text-muted uppercase tracking-widest ml-1">
+                  Full Name / Display Name
+                </label>
+                <div className="relative group">
+                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted group-focus-within:text-slate-800 transition-colors" />
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. Jagan Anand"
+                    value={displayName}
+                    onChange={(e) => setDisplayName(e.target.value)}
+                    className="w-full h-14 pl-12 pr-4 bg-page border border-border rounded-2xl text-sm font-bold focus:outline-none focus:border-slate-800 focus:ring-4 focus:ring-slate-800/10 transition-all"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-text-muted uppercase tracking-widest ml-1">
+                  User ID / Email
+                </label>
+                <div className="relative group">
+                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted group-focus-within:text-slate-800 transition-colors" />
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. JAGAN or admin@rkenterprise.com"
+                    value={userId}
+                    onChange={(e) => setUserId(e.target.value)}
+                    className="w-full h-14 pl-12 pr-4 bg-page border border-border rounded-2xl text-sm font-bold focus:outline-none focus:border-slate-800 focus:ring-4 focus:ring-slate-800/10 transition-all"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-text-muted uppercase tracking-widest ml-1">
+                  Password
+                </label>
+                <div className="relative group">
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted group-focus-within:text-slate-800 transition-colors" />
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    required
+                    placeholder="Minimum 6 characters"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full h-14 pl-12 pr-12 bg-page border border-border rounded-2xl text-sm font-bold focus:outline-none focus:border-slate-800 focus:ring-4 focus:ring-slate-800/10 transition-all"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 p-1 text-text-muted hover:text-slate-800 transition-colors cursor-pointer"
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full h-14 bg-slate-900 text-white rounded-2xl font-black text-lg shadow-xl shadow-slate-900/30 flex items-center justify-center gap-3 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 cursor-pointer mt-2"
+              >
+                {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : <>Create Account <UserPlus className="w-5 h-5" /></>}
+              </button>
+
+              <div className="text-center pt-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsRegisterMode(false)
+                    setError("")
+                  }}
+                  className="text-xs font-bold text-text-secondary hover:text-slate-900 transition-colors cursor-pointer"
+                >
+                  Already have an account? <span className="underline text-slate-900">Sign In</span>
+                </button>
+              </div>
             </form>
           ) : (
             /* Main Sign In Form */
@@ -221,6 +326,19 @@ function LoginForm() {
               >
                 {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : <>Sign In <ChevronRight className="w-5 h-5" /></>}
               </button>
+
+              <div className="text-center pt-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsRegisterMode(true)
+                    setError("")
+                  }}
+                  className="text-xs font-bold text-text-secondary hover:text-slate-900 transition-colors cursor-pointer"
+                >
+                  Need to set up access? <span className="underline text-slate-900">Create Account</span>
+                </button>
+              </div>
             </form>
           )}
         </div>
