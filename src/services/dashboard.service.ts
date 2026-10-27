@@ -1,4 +1,4 @@
-import { getTrips, getTodayTrips } from './trips.service'
+import { getTrips } from './trips.service'
 import { getVehicles } from './vehicles.service'
 import { getPayments } from './payments.service'
 import { getExpenses } from './expenses.service'

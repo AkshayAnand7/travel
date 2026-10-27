@@ -8,16 +8,11 @@ import {
   Wallet,
   Download,
   Search,
-  Filter,
-  PlusCircle,
-  Calendar,
   X,
   Receipt,
-  FileSpreadsheet,
 } from "lucide-react";
 import PageHeader from "@/components/ui/PageHeader";
 import StatCard from "@/components/ui/StatCard";
-import StatusBadge from "@/components/ui/StatusBadge";
 import { formatINR, formatDate, exportToCSV } from "@/lib/utils";
 import type { CashBookEntry, ExpenseCategory, PaymentMode } from "@/types";
 import { createExpense } from "@/services/expenses.service";
@@ -122,8 +117,8 @@ export default function CashBookClient({ initialEntries }: CashBookClientProps) 
         paymentMode: "cash",
         notes: "",
       });
-    } catch (err: any) {
-      alert("Failed to save expense: " + err.message);
+    } catch (err: unknown) {
+      alert("Failed to save expense: " + ((err as Error)?.message || "Unknown error"));
     } finally {
       setSavingExpense(false);
     }

@@ -1,12 +1,9 @@
-import NextAuth from 'next-auth'
-import { authConfig } from './auth.config'
 import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
 
-const { auth } = NextAuth(authConfig)
-
-export default auth((req) => {
-  const { nextUrl } = req
-  const isLoggedIn = !!req.auth
+export function middleware(req: NextRequest) {
+  const { nextUrl, cookies } = req
+  const isLoggedIn = !!cookies.get('firebase_auth')?.value
   const path = nextUrl.pathname
 
   const isProtected = path.startsWith('/travel')
@@ -30,11 +27,13 @@ export default auth((req) => {
 
   // If not logged in and visiting protected /travel route -> send to /login
   if (isProtected && !isLoggedIn) {
-    return NextResponse.redirect(new URL('/login', nextUrl))
+    const loginUrl = new URL('/login', nextUrl)
+    loginUrl.searchParams.set('callbackUrl', path)
+    return NextResponse.redirect(loginUrl)
   }
 
   return NextResponse.next()
-})
+}
 
 export const config = {
   matcher: [

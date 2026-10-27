@@ -158,3 +158,18 @@ export interface TripReport {
   profitLoss: number
   status: TripStatus
 }
+
+// ─── User Profile ───
+export type UserRole = 'admin' | 'manager' | 'staff'
+
+export interface UserProfile {
+  uid: string
+  email: string
+  displayName: string
+  role: UserRole
+  phone?: string
+  userId?: string
+  isActive: boolean
+  createdAt: string
+  updatedAt: string
+}

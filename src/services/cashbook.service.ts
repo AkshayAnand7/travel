@@ -1,6 +1,6 @@
 import { getPayments } from './payments.service'
 import { getExpenses } from './expenses.service'
-import type { CashBookEntry, PaymentMode } from '@/types'
+import type { CashBookEntry } from '@/types'
 
 export async function getCashBookEntries(): Promise<CashBookEntry[]> {
   try {

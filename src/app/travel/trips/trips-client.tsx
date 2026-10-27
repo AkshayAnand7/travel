@@ -6,18 +6,11 @@ import {
   Calendar,
   CheckCircle2,
   Clock,
-  PlusCircle,
   Search,
-  Filter,
   Trash2,
   Edit,
   Eye,
   X,
-  IndianRupee,
-  Navigation,
-  User,
-  Phone,
-  Gauge,
   Check,
 } from "lucide-react";
 import PageHeader from "@/components/ui/PageHeader";
@@ -180,9 +173,10 @@ export default function TripsClient({ initialTrips, vehicles }: TripsClientProps
       }
 
       setForm(initialFormState);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Trip save error:", err);
-      setFeedback({ message: err.message || "Failed to save trip", type: "error" });
+      const msg = (err as Error)?.message || "Failed to save trip";
+      setFeedback({ message: msg, type: "error" });
     } finally {
       setLoading(false);
       setTimeout(() => setFeedback(null), 4000);
@@ -195,7 +189,7 @@ export default function TripsClient({ initialTrips, vehicles }: TripsClientProps
       await deleteTrip(id);
       setTrips((prev) => prev.filter((t) => t.id !== id));
       if (editingTripId === id) handleCancelEdit();
-    } catch (err) {
+    } catch {
       alert("Failed to delete trip");
     }
   };

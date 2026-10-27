@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { useSession, signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/lib/firebase/AuthContext";
 import {
   Menu,
   Search,
@@ -19,15 +20,16 @@ interface TopbarProps {
 }
 
 export default function Topbar({ onToggleMobileSidebar }: TopbarProps) {
-  const { data: session } = useSession();
+  const router = useRouter();
+  const { user, userProfile, signOut } = useAuth();
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [profileOpen, setProfileOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
 
-  const userName = session?.user?.name || "Administrator";
-  const userRole = (session?.user as any)?.role || "admin";
+  const userName = userProfile?.displayName || user?.displayName || user?.email?.split("@")[0] || "Administrator";
+  const userRole = userProfile?.role || "admin";
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -122,7 +124,11 @@ export default function Topbar({ onToggleMobileSidebar }: TopbarProps) {
                 <Settings className="w-4 h-4" /> Settings
               </Link>
               <button
-                onClick={() => signOut({ callbackUrl: "/login" })}
+                onClick={async () => {
+                  setProfileOpen(false);
+                  await signOut();
+                  router.push("/login");
+                }}
                 className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-danger hover:bg-danger-subtle transition-colors w-full text-left cursor-pointer"
               >
                 <LogOut className="w-4 h-4" /> Sign Out

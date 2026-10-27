@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { useSession } from "next-auth/react";
+import { useAuth } from "@/lib/firebase/AuthContext";
 import {
-  Settings,
   Database,
   Shield,
   Layers,
@@ -11,11 +10,7 @@ import {
   Download,
   Upload,
   Trash2,
-  CheckCircle2,
   AlertTriangle,
-  Building2,
-  Globe,
-  Clock,
   Check,
 } from "lucide-react";
 import PageHeader from "@/components/ui/PageHeader";
@@ -37,7 +32,7 @@ export default function SettingsClient({
   expenses,
   reminders,
 }: SettingsClientProps) {
-  const { data: session } = useSession();
+  const { user, userProfile } = useAuth();
   const [lastBackupTime, setLastBackupTime] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<{ message: string; type: "success" | "error" } | null>(null);
   const [importSummary, setImportSummary] = useState<string | null>(null);
@@ -71,8 +66,8 @@ export default function SettingsClient({
 
       setLastBackupTime(new Date().toLocaleTimeString());
       setFeedback({ message: "Full system backup exported successfully!", type: "success" });
-    } catch (err: any) {
-      setFeedback({ message: "Failed to generate backup: " + err.message, type: "error" });
+    } catch (err: unknown) {
+      setFeedback({ message: "Failed to generate backup: " + ((err as Error)?.message || "Unknown error"), type: "error" });
     }
   };
 
@@ -100,8 +95,8 @@ export default function SettingsClient({
           `Backup verified: ${counts.trips} trips, ${counts.vehicles} vehicles, ${counts.payments} payments, ${counts.expenses} expenses, ${counts.reminders} reminders.`
         );
         setFeedback({ message: "Backup validated! Ready to restore.", type: "success" });
-      } catch (err: any) {
-        setFeedback({ message: "Invalid JSON backup file: " + err.message, type: "error" });
+      } catch (err: unknown) {
+        setFeedback({ message: "Invalid JSON backup file: " + ((err as Error)?.message || "Unknown error"), type: "error" });
         setImportSummary(null);
       }
     };
@@ -137,11 +132,11 @@ export default function SettingsClient({
         />
         <StatCard
           label="Login Role"
-          value={(session?.user as any)?.role || "Administrator"}
+          value={userProfile?.role ? userProfile.role.toUpperCase() : "Administrator"}
           icon={Shield}
           iconColor="text-emerald-600"
           iconBg="bg-emerald-50"
-          subtitle={session?.user?.name || "Super Admin"}
+          subtitle={userProfile?.displayName || user?.displayName || user?.email?.split('@')[0] || "Super Admin"}
         />
         <StatCard
           label="App Version"
@@ -301,7 +296,7 @@ export default function SettingsClient({
               <div className="flex justify-between py-1 border-b border-slate-200/60">
                 <span className="text-text-secondary">User:</span>
                 <span className="font-semibold text-text-primary">
-                  {session?.user?.name || "Admin Operator"}
+                  {userProfile?.displayName || user?.displayName || user?.email?.split('@')[0] || "Admin Operator"}
                 </span>
               </div>
               <div className="flex justify-between py-1">

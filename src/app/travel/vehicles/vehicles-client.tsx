@@ -7,19 +7,16 @@ import {
   Wrench,
   CheckCircle2,
   Search,
-  Filter,
-  PlusCircle,
   Edit,
   Trash2,
   AlertTriangle,
   X,
-  FileCheck,
   Check,
 } from "lucide-react";
 import PageHeader from "@/components/ui/PageHeader";
 import StatCard from "@/components/ui/StatCard";
 import StatusBadge from "@/components/ui/StatusBadge";
-import { formatINR, formatDate, normalizeRegNumber, isDateExpiringSoon } from "@/lib/utils";
+import { formatINR, normalizeRegNumber, isDateExpiringSoon } from "@/lib/utils";
 import type { Vehicle } from "@/types";
 import { createVehicle, updateVehicle, deleteVehicle } from "@/services/vehicles.service";
 
@@ -110,9 +107,10 @@ export default function VehiclesClient({ initialVehicles }: VehiclesClientProps)
       }
 
       setForm(initialForm);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Save vehicle error:", err);
-      setFeedback({ message: err.message || "Failed to save vehicle", type: "error" });
+      const msg = (err as Error)?.message || "Failed to save vehicle";
+      setFeedback({ message: msg, type: "error" });
     } finally {
       setLoading(false);
       setTimeout(() => setFeedback(null), 4000);
@@ -125,7 +123,7 @@ export default function VehiclesClient({ initialVehicles }: VehiclesClientProps)
       await deleteVehicle(id);
       setVehicles((prev) => prev.filter((v) => v.id !== id));
       if (editingVehicleId === id) handleCancelEdit();
-    } catch (err) {
+    } catch {
       alert("Failed to remove vehicle");
     }
   };

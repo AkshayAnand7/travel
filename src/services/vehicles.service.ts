@@ -56,7 +56,10 @@ export async function createVehicle(data: Omit<Vehicle, 'id' | 'createdAt' | 'up
 }
 
 export async function updateVehicle(id: string, data: Partial<Vehicle>): Promise<void> {
-  const updateData: any = { ...data, updatedAt: new Date().toISOString() }
+  const updateData: Partial<Vehicle> & { updatedAt: string; registrationNumberNormalized?: string } = {
+    ...data,
+    updatedAt: new Date().toISOString(),
+  }
   if (data.registrationNumber) {
     updateData.registrationNumberNormalized = normalizeRegNumber(data.registrationNumber)
   }

@@ -1,14 +1,12 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useSyncExternalStore } from "react";
 import {
   BarChart3,
   TrendingUp,
   Receipt,
   Wallet,
   Printer,
-  Calendar,
-  Filter,
   Car,
   Download,
 } from "lucide-react";
@@ -30,6 +28,8 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
+const emptySubscribe = () => () => {};
+
 interface ReportsClientProps {
   trips: Trip[];
   vehicles: Vehicle[];
@@ -43,16 +43,12 @@ export default function ReportsClient({
   expenses,
   payments,
 }: ReportsClientProps) {
-  const [mounted, setMounted] = useState(false);
+  const mounted = useSyncExternalStore(emptySubscribe, () => true, () => false);
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
   const [selectedVehicle, setSelectedVehicle] = useState("all");
   const [selectedStatus, setSelectedStatus] = useState("all");
   const [trendRange, setTrendRange] = useState<"7d" | "30d" | "month">("30d");
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   // Filtered trips
   const filteredTrips = useMemo(() => {
@@ -101,11 +97,13 @@ export default function ReportsClient({
   // Overall KPIs
   const totalTripsCount = filteredTrips.length;
   const totalIncome = reportRows.reduce((sum, r) => sum + r.receipts, 0);
-  const filteredExpenses = expenses.filter((e) => {
-    if (dateFrom && e.expenseDate < dateFrom) return false;
-    if (dateTo && e.expenseDate > dateTo) return false;
-    return true;
-  });
+  const filteredExpenses = useMemo(() => {
+    return expenses.filter((e) => {
+      if (dateFrom && e.expenseDate < dateFrom) return false;
+      if (dateTo && e.expenseDate > dateTo) return false;
+      return true;
+    });
+  }, [expenses, dateFrom, dateTo]);
   const totalExpensesSum = filteredExpenses.reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
   const netProfitLoss = totalIncome - totalExpensesSum;
 
@@ -419,7 +417,7 @@ export default function ReportsClient({
                   <XAxis dataKey="month" stroke="#94a3b8" fontSize={11} />
                   <YAxis stroke="#94a3b8" fontSize={11} />
                   <Tooltip
-                    formatter={(value: any) => formatINR(Number(value) || 0)}
+                    formatter={(value: unknown) => formatINR(Number(value) || 0)}
                     contentStyle={{
                       backgroundColor: "#ffffff",
                       borderRadius: "12px",
@@ -483,7 +481,7 @@ export default function ReportsClient({
                   <XAxis dataKey="date" stroke="#94a3b8" fontSize={11} />
                   <YAxis stroke="#94a3b8" fontSize={11} />
                   <Tooltip
-                    formatter={(value: any) => formatINR(Number(value) || 0)}
+                    formatter={(value: unknown) => formatINR(Number(value) || 0)}
                     contentStyle={{
                       backgroundColor: "#ffffff",
                       borderRadius: "12px",

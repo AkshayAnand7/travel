@@ -7,12 +7,7 @@ import {
   UserCheck,
   Clock,
   Search,
-  Filter,
-  PlusCircle,
   Trash2,
-  Edit,
-  X,
-  Calendar,
   Check,
 } from "lucide-react";
 import PageHeader from "@/components/ui/PageHeader";
@@ -86,9 +81,9 @@ export default function PaymentsClient({ initialPayments, trips }: PaymentsClien
       setPayments((prev) => [newPayment, ...prev]);
       setFeedback({ message: "Payment recorded successfully!", type: "success" });
       setForm(initialForm);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Save payment error:", err);
-      setFeedback({ message: err.message || "Failed to record payment", type: "error" });
+      setFeedback({ message: ((err as Error)?.message || "Failed to record payment"), type: "error" });
     } finally {
       setLoading(false);
       setTimeout(() => setFeedback(null), 4000);
@@ -100,7 +95,7 @@ export default function PaymentsClient({ initialPayments, trips }: PaymentsClien
     try {
       await deletePayment(id);
       setPayments((prev) => prev.filter((p) => p.id !== id));
-    } catch (err) {
+    } catch {
       alert("Failed to delete payment");
     }
   };

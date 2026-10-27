@@ -152,12 +152,12 @@ export function escapeCsvField(field: string | number): string {
   return str
 }
 
-export function downloadCsv(data: Record<string, any>[], filename: string) {
+export function downloadCsv(data: Record<string, unknown>[], filename: string) {
   if (data.length === 0) return
   const headers = Object.keys(data[0])
   const csv = [
     headers.map(escapeCsvField).join(','),
-    ...data.map(row => headers.map(h => escapeCsvField(row[h] ?? '')).join(','))
+    ...data.map(row => headers.map(h => escapeCsvField((row[h] as string | number) ?? '')).join(','))
   ].join('\n')
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
   const url = URL.createObjectURL(blob)

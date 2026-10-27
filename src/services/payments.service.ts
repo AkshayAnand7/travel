@@ -1,10 +1,9 @@
 import {
-  collection, doc, getDocs, addDoc, updateDoc, deleteDoc,
+  collection, doc, getDocs, addDoc, deleteDoc,
   query, where, orderBy, limit,
 } from 'firebase/firestore'
 import { db } from '@/lib/firebase/config'
 import type { Payment } from '@/types'
-import { generatePaymentId } from '@/lib/utils'
 
 const COLLECTION = 'payments'
 

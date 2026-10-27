@@ -7,13 +7,9 @@ import {
   CheckCircle2,
   AlertTriangle,
   Search,
-  Filter,
-  PlusCircle,
   Trash2,
   Check,
   RotateCcw,
-  Calendar,
-  X,
 } from "lucide-react";
 import PageHeader from "@/components/ui/PageHeader";
 import StatCard from "@/components/ui/StatCard";
@@ -89,9 +85,9 @@ export default function RemindersClient({
       setReminders((prev) => [newReminder, ...prev]);
       setFeedback({ message: "Reminder added successfully!", type: "success" });
       setForm(initialForm);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Create reminder error:", err);
-      setFeedback({ message: err.message || "Failed to create reminder", type: "error" });
+      setFeedback({ message: ((err as Error)?.message || "Failed to create reminder"), type: "error" });
     } finally {
       setLoading(false);
       setTimeout(() => setFeedback(null), 4000);
@@ -114,7 +110,7 @@ export default function RemindersClient({
             : item
         )
       );
-    } catch (err) {
+    } catch {
       alert("Failed to update status");
     }
   };
@@ -124,7 +120,7 @@ export default function RemindersClient({
     try {
       await deleteReminder(id);
       setReminders((prev) => prev.filter((r) => r.id !== id));
-    } catch (err) {
+    } catch {
       alert("Failed to delete reminder");
     }
   };
@@ -350,6 +346,18 @@ export default function RemindersClient({
                   onChange={(e) => setSearch(e.target.value)}
                 />
               </div>
+              <select
+                className="select py-1.5 text-xs"
+                value={categoryFilter}
+                onChange={(e) => setCategoryFilter(e.target.value)}
+              >
+                <option value="all">All Categories</option>
+                <option value="vehicle_service">Vehicle Service</option>
+                <option value="documents">Documents</option>
+                <option value="trip">Trip</option>
+                <option value="driver">Driver</option>
+                <option value="general">General</option>
+              </select>
               <select
                 className="select py-1.5 text-xs"
                 value={statusFilter}

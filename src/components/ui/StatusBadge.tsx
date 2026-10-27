@@ -1,5 +1,3 @@
-import { TripStatus, PaymentType, ReminderStatus } from "@/types";
-
 interface StatusBadgeProps {
   status: string;
   variant?: 'trip' | 'payment' | 'reminder' | 'vehicle' | 'default';
