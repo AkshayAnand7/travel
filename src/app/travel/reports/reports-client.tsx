@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, useMemo, useSyncExternalStore } from "react";
+import { useState, useMemo } from "react";
 import {
-  BarChart3,
   TrendingUp,
   Receipt,
   Wallet,
@@ -15,20 +14,17 @@ import StatCard from "@/components/ui/StatCard";
 import StatusBadge from "@/components/ui/StatusBadge";
 import { formatINR, formatDate, exportToCSV } from "@/lib/utils";
 import type { Trip, Vehicle, Expense, Payment } from "@/types";
-import {
-  BarChart,
-  Bar,
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from "recharts";
+import dynamic from "next/dynamic";
 
-const emptySubscribe = () => () => {};
+const ReportCharts = dynamic(() => import("@/components/reports/ReportCharts"), {
+  ssr: false,
+  loading: () => (
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 print:hidden">
+      <div className="card h-[360px] animate-pulse bg-slate-100/60" />
+      <div className="card h-[360px] animate-pulse bg-slate-100/60" />
+    </div>
+  ),
+});
 
 interface ReportsClientProps {
   trips: Trip[];
@@ -43,7 +39,6 @@ export default function ReportsClient({
   expenses,
   payments,
 }: ReportsClientProps) {
-  const mounted = useSyncExternalStore(emptySubscribe, () => true, () => false);
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
   const [selectedVehicle, setSelectedVehicle] = useState("all");
@@ -397,116 +392,13 @@ export default function ReportsClient({
         )}
       </div>
 
-      {/* 2 Charts Cards */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 print:hidden">
-        {/* Chart 1: Income vs Expenses */}
-        <div className="card">
-          <div className="flex items-center justify-between pb-3 border-b border-border mb-4">
-            <div>
-              <h3 className="font-bold text-sm text-text-primary">Income vs Expenses</h3>
-              <p className="text-xs text-text-secondary">Monthly comparison breakdown</p>
-            </div>
-            <BarChart3 className="w-5 h-5 text-primary" />
-          </div>
-
-          <div className="h-[280px] w-full">
-            {mounted ? (
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={incomeVsExpenseData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                  <XAxis dataKey="month" stroke="#94a3b8" fontSize={11} />
-                  <YAxis stroke="#94a3b8" fontSize={11} />
-                  <Tooltip
-                    formatter={(value: unknown) => formatINR(Number(value) || 0)}
-                    contentStyle={{
-                      backgroundColor: "#ffffff",
-                      borderRadius: "12px",
-                      border: "1px solid #e2e8f0",
-                      fontSize: "12px",
-                    }}
-                  />
-                  <Legend wrapperStyle={{ fontSize: "11px", paddingTop: "8px" }} />
-                  <Bar dataKey="income" name="Income (₹)" fill="#10b981" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="expenses" name="Expenses (₹)" fill="#f43f5e" radius={[4, 4, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            ) : (
-              <div className="flex items-center justify-center h-full text-xs text-text-muted">
-                Loading chart...
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Chart 2: Profit Trend */}
-        <div className="card">
-          <div className="flex items-center justify-between pb-3 border-b border-border mb-4">
-            <div>
-              <h3 className="font-bold text-sm text-text-primary">Profit Trend</h3>
-              <p className="text-xs text-text-secondary">Cumulative net margins over time</p>
-            </div>
-            <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-lg text-xs">
-              <button
-                onClick={() => setTrendRange("7d")}
-                className={`px-2 py-0.5 rounded font-medium ${
-                  trendRange === "7d" ? "bg-white shadow text-primary" : "text-slate-600"
-                }`}
-              >
-                7D
-              </button>
-              <button
-                onClick={() => setTrendRange("30d")}
-                className={`px-2 py-0.5 rounded font-medium ${
-                  trendRange === "30d" ? "bg-white shadow text-primary" : "text-slate-600"
-                }`}
-              >
-                30D
-              </button>
-              <button
-                onClick={() => setTrendRange("month")}
-                className={`px-2 py-0.5 rounded font-medium ${
-                  trendRange === "month" ? "bg-white shadow text-primary" : "text-slate-600"
-                }`}
-              >
-                Month
-              </button>
-            </div>
-          </div>
-
-          <div className="h-[280px] w-full">
-            {mounted ? (
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={profitTrendData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                  <XAxis dataKey="date" stroke="#94a3b8" fontSize={11} />
-                  <YAxis stroke="#94a3b8" fontSize={11} />
-                  <Tooltip
-                    formatter={(value: unknown) => formatINR(Number(value) || 0)}
-                    contentStyle={{
-                      backgroundColor: "#ffffff",
-                      borderRadius: "12px",
-                      border: "1px solid #e2e8f0",
-                      fontSize: "12px",
-                    }}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="profit"
-                    name="Profit (₹)"
-                    stroke="#1769FF"
-                    strokeWidth={2.5}
-                    dot={{ fill: "#1769FF", r: 3 }}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            ) : (
-              <div className="flex items-center justify-center h-full text-xs text-text-muted">
-                Loading chart...
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
+      {/* Dynamic Charts Component */}
+      <ReportCharts
+        incomeVsExpenseData={incomeVsExpenseData}
+        profitTrendData={profitTrendData}
+        trendRange={trendRange}
+        onTrendRangeChange={setTrendRange}
+      />
     </div>
   );
 }

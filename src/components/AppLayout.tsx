@@ -19,10 +19,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
       {/* Main content area */}
       <div
-        className={`transition-all duration-300 ${collapsed ? "lg:ml-[76px]" : "lg:ml-[270px]"}`}
+        className={`transition-all duration-300 ease-in-out ${
+          collapsed ? "lg:ml-[72px]" : "lg:ml-[260px]"
+        }`}
       >
         <Topbar onToggleMobileSidebar={() => setMobileOpen(!mobileOpen)} />
-        <main className="p-4 sm:p-6 lg:p-8 min-h-[calc(100vh-72px)]">
+        <main className="p-4 sm:p-6 lg:p-8 min-h-[calc(100vh-68px)] max-w-7xl mx-auto">
           {children}
         </main>
       </div>

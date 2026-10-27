@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import AuthProvider from "@/components/AuthProvider";
 import DisableNumberScroll from "@/components/DisableNumberScroll";
-import { Inter, JetBrains_Mono, Dancing_Script } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -28,16 +28,10 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
-const dancingScript = Dancing_Script({
-  subsets: ["latin"],
-  variable: "--font-cursive",
-  display: "swap",
-});
-
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${jetbrainsMono.variable} ${dancingScript.variable} min-h-screen bg-page text-text-primary`}>
+      <body className={`${inter.variable} ${jetbrainsMono.variable} min-h-screen bg-page text-text-primary antialiased selection:bg-primary/10 selection:text-primary`}>
         <AuthProvider>
           <DisableNumberScroll />
           {children}

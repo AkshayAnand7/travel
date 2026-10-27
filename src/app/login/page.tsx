@@ -101,21 +101,19 @@ function LoginForm() {
   }
 
   return (
-    <div className="min-h-screen bg-page flex flex-col items-center justify-center py-8 sm:py-12 px-4 sm:px-6">
-      <div className="fixed inset-0 -z-10 bg-mesh opacity-30" />
-
-      <div className="w-full max-w-md animate-fade-in">
-        <div className="glass p-6 sm:p-8 md:p-10 rounded-3xl sm:rounded-4xl border border-white shadow-2xl relative overflow-hidden">
+    <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center py-10 px-4 sm:px-6">
+      <div className="w-full max-w-md">
+        <div className="bg-white p-7 sm:p-9 rounded-2xl border border-slate-200 shadow-xl shadow-slate-900/5 relative">
           {/* Header */}
-          <div className="relative z-10 mb-8 text-center">
-            <div className="w-16 h-16 rounded-2xl bg-slate-900 border border-slate-700 shadow-xl mb-5 mx-auto flex items-center justify-center text-white">
-              <Bus className="w-8 h-8 text-emerald-400" />
+          <div className="mb-6 text-center">
+            <div className="w-12 h-12 rounded-xl bg-slate-900 border border-slate-800 shadow-md mb-3 mx-auto flex items-center justify-center text-white">
+              <Bus className="w-6 h-6 text-emerald-400" />
             </div>
-            <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-1">Fleet Operations</p>
-            <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-slate-900">
+            <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-widest mb-1">RK Travel Hub</p>
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900">
               {isResetMode ? "Reset Password" : isRegisterMode ? "Register Account" : "Travel Portal"}
             </h2>
-            <p className="text-xs text-text-muted mt-1">
+            <p className="text-xs text-text-secondary mt-1">
               {isResetMode
                 ? "Enter your User ID or email to receive reset instructions"
                 : isRegisterMode
@@ -126,36 +124,36 @@ function LoginForm() {
 
           {/* Success */}
           {successMessage && (
-            <div className="p-4 mb-6 bg-emerald-50 border border-emerald-200 rounded-2xl flex items-center gap-3 animate-fade-in">
-              <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
-              <p className="text-xs font-bold text-emerald-800 leading-tight">{successMessage}</p>
+            <div className="p-3.5 mb-5 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center gap-2.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+              <p className="text-xs font-semibold text-emerald-800 leading-tight">{successMessage}</p>
             </div>
           )}
 
           {/* Error */}
           {error && (
-            <div className="p-4 mb-6 bg-danger-subtle border border-danger/20 rounded-2xl flex items-center gap-3 animate-fade-in">
-              <AlertCircle className="w-5 h-5 text-danger shrink-0" />
-              <p className="text-xs font-bold text-danger leading-tight">{error}</p>
+            <div className="p-3.5 mb-5 bg-rose-50 border border-rose-200 rounded-xl flex items-center gap-2.5">
+              <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
+              <p className="text-xs font-semibold text-rose-800 leading-tight">{error}</p>
             </div>
           )}
 
           {/* Reset Password Form */}
           {isResetMode ? (
-            <form onSubmit={handlePasswordReset} className="space-y-6 relative z-10">
-              <div className="space-y-2">
-                <label className="text-[10px] font-black text-text-muted uppercase tracking-widest ml-1">
+            <form onSubmit={handlePasswordReset} className="space-y-4">
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-text-secondary">
                   User ID or Email
                 </label>
                 <div className="relative group">
-                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted group-focus-within:text-slate-800 transition-colors" />
+                  <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-primary transition-colors" />
                   <input
                     type="text"
                     required
                     placeholder="e.g. admin@rkenterprise.com or JAGAN"
                     value={resetEmail}
                     onChange={(e) => setResetEmail(e.target.value)}
-                    className="w-full h-14 pl-12 pr-4 bg-page border border-border rounded-2xl text-sm font-bold focus:outline-none focus:border-slate-800 focus:ring-4 focus:ring-slate-800/10 transition-all"
+                    className="w-full h-10.5 pl-10 pr-3 bg-white border border-slate-300 rounded-lg text-sm font-medium focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
                   />
                 </div>
               </div>
@@ -163,9 +161,9 @@ function LoginForm() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full h-14 bg-slate-900 text-white rounded-2xl font-black text-base shadow-xl shadow-slate-900/30 flex items-center justify-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 cursor-pointer"
+                className="btn btn-primary w-full h-10.5 rounded-lg text-sm font-semibold flex items-center justify-center gap-2"
               >
-                {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <>Send Reset Link <KeyRound className="w-4 h-4" /></>}
+                {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <>Send Reset Link <KeyRound className="w-4 h-4" /></>}
               </button>
 
               <button
@@ -174,66 +172,66 @@ function LoginForm() {
                   setIsResetMode(false)
                   setError("")
                 }}
-                className="w-full text-center text-xs font-bold text-text-secondary hover:text-slate-900 transition-colors flex items-center justify-center gap-1.5 cursor-pointer pt-2"
+                className="w-full text-center text-xs font-medium text-text-secondary hover:text-slate-900 transition-colors flex items-center justify-center gap-1 pt-1"
               >
                 <ArrowLeft className="w-3.5 h-3.5" /> Back to Sign In
               </button>
             </form>
           ) : isRegisterMode ? (
             /* Register Mode */
-            <form onSubmit={handleRegister} className="space-y-5 relative z-10">
-              <div className="space-y-2">
-                <label className="text-[10px] font-black text-text-muted uppercase tracking-widest ml-1">
+            <form onSubmit={handleRegister} className="space-y-4">
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-text-secondary">
                   Full Name / Display Name
                 </label>
                 <div className="relative group">
-                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted group-focus-within:text-slate-800 transition-colors" />
+                  <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-primary transition-colors" />
                   <input
                     type="text"
                     required
                     placeholder="e.g. Jagan Anand"
                     value={displayName}
                     onChange={(e) => setDisplayName(e.target.value)}
-                    className="w-full h-14 pl-12 pr-4 bg-page border border-border rounded-2xl text-sm font-bold focus:outline-none focus:border-slate-800 focus:ring-4 focus:ring-slate-800/10 transition-all"
+                    className="w-full h-10.5 pl-10 pr-3 bg-white border border-slate-300 rounded-lg text-sm font-medium focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
                   />
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <label className="text-[10px] font-black text-text-muted uppercase tracking-widest ml-1">
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-text-secondary">
                   User ID / Email
                 </label>
                 <div className="relative group">
-                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted group-focus-within:text-slate-800 transition-colors" />
+                  <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-primary transition-colors" />
                   <input
                     type="text"
                     required
                     placeholder="e.g. JAGAN or admin@rkenterprise.com"
                     value={userId}
                     onChange={(e) => setUserId(e.target.value)}
-                    className="w-full h-14 pl-12 pr-4 bg-page border border-border rounded-2xl text-sm font-bold focus:outline-none focus:border-slate-800 focus:ring-4 focus:ring-slate-800/10 transition-all"
+                    className="w-full h-10.5 pl-10 pr-3 bg-white border border-slate-300 rounded-lg text-sm font-medium focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
                   />
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <label className="text-[10px] font-black text-text-muted uppercase tracking-widest ml-1">
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-text-secondary">
                   Password
                 </label>
                 <div className="relative group">
-                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted group-focus-within:text-slate-800 transition-colors" />
+                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-primary transition-colors" />
                   <input
                     type={showPassword ? "text" : "password"}
                     required
                     placeholder="Minimum 6 characters"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full h-14 pl-12 pr-12 bg-page border border-border rounded-2xl text-sm font-bold focus:outline-none focus:border-slate-800 focus:ring-4 focus:ring-slate-800/10 transition-all"
+                    className="w-full h-10.5 pl-10 pr-10 bg-white border border-slate-300 rounded-lg text-sm font-medium focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 p-1 text-text-muted hover:text-slate-800 transition-colors cursor-pointer"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 transition-colors"
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -243,9 +241,9 @@ function LoginForm() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full h-14 bg-slate-900 text-white rounded-2xl font-black text-lg shadow-xl shadow-slate-900/30 flex items-center justify-center gap-3 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 cursor-pointer mt-2"
+                className="btn btn-primary w-full h-10.5 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 mt-2"
               >
-                {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : <>Create Account <UserPlus className="w-5 h-5" /></>}
+                {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <>Create Account <UserPlus className="w-4 h-4" /></>}
               </button>
 
               <div className="text-center pt-2">
@@ -255,35 +253,35 @@ function LoginForm() {
                     setIsRegisterMode(false)
                     setError("")
                   }}
-                  className="text-xs font-bold text-text-secondary hover:text-slate-900 transition-colors cursor-pointer"
+                  className="text-xs text-text-secondary hover:text-slate-900 transition-colors"
                 >
-                  Already have an account? <span className="underline text-slate-900">Sign In</span>
+                  Already have an account? <span className="underline font-semibold text-primary">Sign In</span>
                 </button>
               </div>
             </form>
           ) : (
             /* Main Sign In Form */
-            <form onSubmit={handleLogin} className="space-y-5 relative z-10">
-              <div className="space-y-2">
-                <label className="text-[10px] font-black text-text-muted uppercase tracking-widest ml-1">
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-text-secondary">
                   User ID / Email
                 </label>
                 <div className="relative group">
-                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted group-focus-within:text-slate-800 transition-colors" />
+                  <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-primary transition-colors" />
                   <input
                     type="text"
                     required
                     placeholder="e.g. JAGAN"
                     value={userId}
                     onChange={(e) => setUserId(e.target.value)}
-                    className="w-full h-14 pl-12 pr-4 bg-page border border-border rounded-2xl text-sm font-bold focus:outline-none focus:border-slate-800 focus:ring-4 focus:ring-slate-800/10 transition-all uppercase"
+                    className="w-full h-10.5 pl-10 pr-3 bg-white border border-slate-300 rounded-lg text-sm font-medium focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all uppercase"
                   />
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <div className="flex items-center justify-between ml-1">
-                  <label className="text-[10px] font-black text-text-muted uppercase tracking-widest">
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-semibold text-text-secondary">
                     Password
                   </label>
                   <button
@@ -294,25 +292,25 @@ function LoginForm() {
                       setSuccessMessage("")
                       setResetEmail(userId)
                     }}
-                    className="text-[11px] font-semibold text-text-muted hover:text-slate-900 transition-colors cursor-pointer"
+                    className="text-xs text-primary hover:underline font-medium"
                   >
                     Forgot password?
                   </button>
                 </div>
                 <div className="relative group">
-                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted group-focus-within:text-slate-800 transition-colors" />
+                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-primary transition-colors" />
                   <input
                     type={showPassword ? "text" : "password"}
                     required
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full h-14 pl-12 pr-12 bg-page border border-border rounded-2xl text-sm font-bold focus:outline-none focus:border-slate-800 focus:ring-4 focus:ring-slate-800/10 transition-all"
+                    className="w-full h-10.5 pl-10 pr-10 bg-white border border-slate-300 rounded-lg text-sm font-medium focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 p-1 text-text-muted hover:text-slate-800 transition-colors cursor-pointer"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 transition-colors"
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -322,9 +320,9 @@ function LoginForm() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full h-14 bg-slate-900 text-white rounded-2xl font-black text-lg shadow-xl shadow-slate-900/30 flex items-center justify-center gap-3 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 cursor-pointer mt-2"
+                className="btn btn-primary w-full h-10.5 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 mt-2 shadow-sm"
               >
-                {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : <>Sign In <ChevronRight className="w-5 h-5" /></>}
+                {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <>Sign In <ChevronRight className="w-4 h-4" /></>}
               </button>
 
               <div className="text-center pt-2">
@@ -334,19 +332,19 @@ function LoginForm() {
                     setIsRegisterMode(true)
                     setError("")
                   }}
-                  className="text-xs font-bold text-text-secondary hover:text-slate-900 transition-colors cursor-pointer"
+                  className="text-xs text-text-secondary hover:text-slate-900 transition-colors"
                 >
-                  Need to set up access? <span className="underline text-slate-900">Create Account</span>
+                  Need to set up access? <span className="underline font-semibold text-primary">Create Account</span>
                 </button>
               </div>
             </form>
           )}
         </div>
 
-        <div className="mt-8 text-center flex flex-col items-center gap-2">
-          <div className="flex items-center gap-2 px-3 py-1 bg-white border border-border rounded-full shadow-sm">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
-            <span className="text-[10px] font-bold text-text-secondary uppercase tracking-widest">Authorized Access Only</span>
+        <div className="mt-6 text-center flex flex-col items-center gap-2">
+          <div className="flex items-center gap-1.5 px-3 py-1 bg-white border border-slate-200 rounded-full shadow-xs">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+            <span className="text-[11px] font-semibold text-slate-600">Enterprise Fleet Access Only</span>
           </div>
         </div>
       </div>

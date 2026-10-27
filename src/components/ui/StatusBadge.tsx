@@ -3,29 +3,29 @@ interface StatusBadgeProps {
   variant?: 'trip' | 'payment' | 'reminder' | 'vehicle' | 'default';
 }
 
-const tripColors: Record<string, string> = {
-  scheduled: "badge-info",
-  in_progress: "badge-warning",
-  completed: "badge-success",
-  cancelled: "badge-danger",
+const tripColors: Record<string, { badge: string; dot: string }> = {
+  scheduled: { badge: "badge-info", dot: "bg-blue-600" },
+  in_progress: { badge: "badge-warning", dot: "bg-amber-500 animate-pulse" },
+  completed: { badge: "badge-success", dot: "bg-emerald-600" },
+  cancelled: { badge: "badge-danger", dot: "bg-rose-600" },
 };
 
-const paymentColors: Record<string, string> = {
-  customer_received: "badge-success",
-  driver_payment: "badge-warning",
+const paymentColors: Record<string, { badge: string; dot: string }> = {
+  customer_received: { badge: "badge-success", dot: "bg-emerald-600" },
+  driver_payment: { badge: "badge-warning", dot: "bg-amber-600" },
 };
 
-const reminderColors: Record<string, string> = {
-  pending: "badge-warning",
-  upcoming: "badge-info",
-  overdue: "badge-danger",
-  completed: "badge-success",
+const reminderColors: Record<string, { badge: string; dot: string }> = {
+  pending: { badge: "badge-warning", dot: "bg-amber-500" },
+  upcoming: { badge: "badge-info", dot: "bg-blue-500" },
+  overdue: { badge: "badge-danger", dot: "bg-rose-600" },
+  completed: { badge: "badge-success", dot: "bg-emerald-600" },
 };
 
-const vehicleColors: Record<string, string> = {
-  active: "badge-success",
-  inactive: "badge-neutral",
-  service_due: "badge-danger",
+const vehicleColors: Record<string, { badge: string; dot: string }> = {
+  active: { badge: "badge-success", dot: "bg-emerald-600" },
+  inactive: { badge: "badge-neutral", dot: "bg-slate-400" },
+  service_due: { badge: "badge-danger", dot: "bg-rose-600" },
 };
 
 const labelMap: Record<string, string> = {
@@ -44,20 +44,34 @@ const labelMap: Record<string, string> = {
 };
 
 export default function StatusBadge({ status, variant = 'default' }: StatusBadgeProps) {
-  let className = "badge-neutral";
-  
+  let config = { badge: "badge-neutral", dot: "bg-slate-400" };
+
   switch (variant) {
-    case 'trip': className = tripColors[status] || "badge-neutral"; break;
-    case 'payment': className = paymentColors[status] || "badge-neutral"; break;
-    case 'reminder': className = reminderColors[status] || "badge-neutral"; break;
-    case 'vehicle': className = vehicleColors[status] || "badge-neutral"; break;
+    case 'trip':
+      config = tripColors[status] || config;
+      break;
+    case 'payment':
+      config = paymentColors[status] || config;
+      break;
+    case 'reminder':
+      config = reminderColors[status] || config;
+      break;
+    case 'vehicle':
+      config = vehicleColors[status] || config;
+      break;
     default:
-      className = tripColors[status] || paymentColors[status] || reminderColors[status] || vehicleColors[status] || "badge-neutral";
+      config =
+        tripColors[status] ||
+        paymentColors[status] ||
+        reminderColors[status] ||
+        vehicleColors[status] ||
+        config;
   }
 
   return (
-    <span className={className}>
-      {labelMap[status] || status}
+    <span className={config.badge}>
+      <span className={`w-1.5 h-1.5 rounded-full ${config.dot}`} aria-hidden="true" />
+      <span>{labelMap[status] || status}</span>
     </span>
   );
 }

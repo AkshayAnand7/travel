@@ -6,8 +6,12 @@ interface PageHeaderProps {
 export default function PageHeader({ title, subtitle }: PageHeaderProps) {
   return (
     <div className="mb-6">
-      <h1 className="text-2xl lg:text-[32px] font-bold text-text-primary leading-tight">{title}</h1>
-      <p className="text-sm text-text-secondary mt-1">{subtitle}</p>
+      <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-text-primary leading-tight">
+        {title}
+      </h1>
+      <p className="text-xs sm:text-[13px] text-text-secondary mt-0.5 font-normal leading-relaxed">
+        {subtitle}
+      </p>
     </div>
   );
 }

@@ -14,6 +14,7 @@ import {
   ChevronLeft,
   ChevronRight,
   X,
+  ShieldCheck,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -34,7 +35,12 @@ const navItems = [
   { name: "Settings", href: "/travel/settings", icon: Settings },
 ];
 
-export default function Sidebar({ collapsed, mobileOpen, onToggleCollapse, onCloseMobile }: SidebarProps) {
+export default function Sidebar({
+  collapsed,
+  mobileOpen,
+  onToggleCollapse,
+  onCloseMobile,
+}: SidebarProps) {
   const pathname = usePathname();
 
   const isActive = (href: string) => {
@@ -47,7 +53,7 @@ export default function Sidebar({ collapsed, mobileOpen, onToggleCollapse, onClo
       {/* Mobile overlay */}
       {mobileOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+          className="fixed inset-0 z-40 bg-slate-950/60 backdrop-blur-xs lg:hidden"
           onClick={onCloseMobile}
         />
       )}
@@ -56,28 +62,32 @@ export default function Sidebar({ collapsed, mobileOpen, onToggleCollapse, onClo
       <aside
         className={`
           fixed top-0 left-0 z-50 h-screen flex flex-col
-          bg-sidebar text-white transition-all duration-300
+          bg-sidebar text-slate-100 transition-all duration-300 ease-in-out border-r border-slate-800/80
           ${mobileOpen ? "translate-x-0" : "-translate-x-full"}
           lg:translate-x-0
-          ${collapsed ? "lg:w-[76px]" : "lg:w-[270px]"}
-          w-[270px]
+          ${collapsed ? "lg:w-[72px]" : "lg:w-[260px]"}
+          w-[260px]
         `}
       >
-        {/* Logo / Brand */}
-        <div className="flex items-center gap-3 px-5 h-[76px] shrink-0 border-b border-white/5">
-          <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shrink-0 shadow-lg shadow-primary/30">
+        {/* Brand Header */}
+        <div className="flex items-center gap-3 px-4 h-[68px] shrink-0 border-b border-slate-800/80">
+          <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center shrink-0 shadow-sm shadow-blue-500/20 border border-blue-400/30">
             <Bus className="w-5 h-5 text-white" />
           </div>
           {!collapsed && (
             <div className="overflow-hidden">
-              <h1 className="text-sm font-bold tracking-wide leading-tight">TRAVEL HUB</h1>
-              <p className="text-[10px] text-blue-300/70 font-medium tracking-widest">RK ENTERPRISE</p>
+              <h1 className="text-xs font-bold tracking-wider leading-tight text-white uppercase">
+                RK Travel Hub
+              </h1>
+              <p className="text-[10px] text-slate-400 font-medium tracking-widest uppercase">
+                RK Enterprise
+              </p>
             </div>
           )}
           {/* Mobile close */}
           <button
             onClick={onCloseMobile}
-            className="ml-auto p-1.5 rounded-lg hover:bg-white/10 lg:hidden cursor-pointer"
+            className="ml-auto p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 lg:hidden cursor-pointer"
             aria-label="Close sidebar"
           >
             <X className="w-5 h-5" />
@@ -87,8 +97,8 @@ export default function Sidebar({ collapsed, mobileOpen, onToggleCollapse, onClo
         {/* Navigation */}
         <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
           {!collapsed && (
-            <p className="text-[10px] font-semibold text-blue-300/40 uppercase tracking-widest px-3 mb-3">
-              Main Menu
+            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider px-3 mb-2.5">
+              Operations Menu
             </p>
           )}
           {navItems.map((item) => {
@@ -100,20 +110,25 @@ export default function Sidebar({ collapsed, mobileOpen, onToggleCollapse, onClo
                 onClick={onCloseMobile}
                 title={collapsed ? item.name : undefined}
                 className={`
-                  flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium
-                  transition-all duration-200 group relative
-                  ${active
-                    ? "bg-primary text-white shadow-lg shadow-primary/30"
-                    : "text-slate-400 hover:text-white hover:bg-white/5"
+                  flex items-center gap-3 px-3 py-2 rounded-lg text-[13px] font-medium
+                  transition-all duration-150 group relative
+                  ${
+                    active
+                      ? "bg-blue-600 text-white font-semibold shadow-xs"
+                      : "text-slate-400 hover:text-slate-100 hover:bg-white/[0.06]"
                   }
                   ${collapsed ? "justify-center" : ""}
                 `}
               >
-                <item.icon className={`w-5 h-5 shrink-0 ${active ? "text-white" : "text-slate-500 group-hover:text-slate-300"}`} />
+                <item.icon
+                  className={`w-4 h-4 shrink-0 transition-colors ${
+                    active ? "text-white" : "text-slate-400 group-hover:text-slate-200"
+                  }`}
+                />
                 {!collapsed && <span>{item.name}</span>}
                 {/* Tooltip for collapsed state */}
                 {collapsed && (
-                  <span className="absolute left-full ml-3 px-2.5 py-1 bg-sidebar-secondary text-white text-xs font-medium rounded-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity whitespace-nowrap z-50 shadow-xl border border-white/10">
+                  <span className="absolute left-full ml-3 px-2.5 py-1 bg-slate-900 text-white text-xs font-medium rounded-md opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity whitespace-nowrap z-50 shadow-lg border border-slate-700">
                     {item.name}
                   </span>
                 )}
@@ -123,20 +138,37 @@ export default function Sidebar({ collapsed, mobileOpen, onToggleCollapse, onClo
         </nav>
 
         {/* Collapse toggle (desktop only) */}
-        <button
-          onClick={onToggleCollapse}
-          className="hidden lg:flex items-center justify-center h-10 mx-3 mb-2 rounded-xl hover:bg-white/5 text-slate-500 hover:text-white transition-colors cursor-pointer"
-          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-        >
-          {collapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
-        </button>
+        <div className="px-3 py-2 border-t border-slate-800/80">
+          <button
+            onClick={onToggleCollapse}
+            className="hidden lg:flex items-center justify-center w-full h-9 rounded-lg hover:bg-white/[0.06] text-slate-400 hover:text-slate-200 transition-colors cursor-pointer text-xs gap-2"
+            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          >
+            {collapsed ? (
+              <ChevronRight className="w-4 h-4" />
+            ) : (
+              <>
+                <ChevronLeft className="w-4 h-4" />
+                <span className="text-[11px] font-medium text-slate-400">Collapse</span>
+              </>
+            )}
+          </button>
+        </div>
 
-        {/* Decorative brand text */}
+        {/* Bottom operational status */}
         {!collapsed && (
-          <div className="px-5 pb-6 border-t border-white/5 pt-4">
-            <p className="font-[var(--font-cursive)] text-2xl text-blue-400/30 leading-tight">
-              Travel<br />Beyond<br />Borders
-            </p>
+          <div className="px-4 py-3 border-t border-slate-800/80 bg-slate-950/40">
+            <div className="flex items-center gap-2">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+              </span>
+              <span className="text-[11px] font-medium text-slate-300">System Connected</span>
+            </div>
+            <div className="flex items-center gap-1.5 text-[10px] text-slate-500 mt-0.5">
+              <ShieldCheck className="w-3 h-3 text-slate-500" />
+              <span>Fleet Operations v0.1.0</span>
+            </div>
           </div>
         )}
       </aside>
