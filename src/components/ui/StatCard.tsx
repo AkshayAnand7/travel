@@ -31,7 +31,7 @@ export default function StatCard({
           </p>
         </div>
         <div
-          className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 border border-slate-200/50 shadow-xs transition-transform duration-200 group-hover:scale-105 ${iconBg}`}
+          className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border border-white/80 shadow-xs backdrop-blur-xs transition-transform duration-200 group-hover:scale-105 ${iconBg}`}
         >
           <Icon className={`w-5 h-5 ${iconColor}`} />
         </div>

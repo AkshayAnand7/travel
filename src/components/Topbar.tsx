@@ -47,7 +47,7 @@ export default function Topbar({ onToggleMobileSidebar }: TopbarProps) {
   }, [searchOpen]);
 
   return (
-    <header className="sticky top-0 z-30 h-[68px] bg-white border-b border-border flex items-center justify-between px-4 lg:px-8 shadow-xs">
+    <header className="sticky top-0 z-30 h-[68px] bg-white/75 backdrop-blur-md border-b border-border/80 flex items-center justify-between px-4 lg:px-8 shadow-[0_1px_3px_rgba(15,23,42,0.03)]">
       {/* Left: Hamburger + Search */}
       <div className="flex items-center gap-3">
         <button
@@ -67,7 +67,7 @@ export default function Topbar({ onToggleMobileSidebar }: TopbarProps) {
             placeholder="Search trips, vehicles, customers..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-[280px] lg:w-[340px] h-9 pl-9 pr-4 bg-slate-50 border border-border rounded-lg text-xs text-text-primary placeholder:text-text-muted focus:outline-none focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all"
+            className="w-[280px] lg:w-[340px] h-9 pl-9 pr-4 bg-slate-100/70 backdrop-blur-xs border border-border/80 rounded-lg text-xs text-text-primary placeholder:text-text-muted focus:outline-none focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all"
           />
         </div>
 
@@ -109,9 +109,9 @@ export default function Topbar({ onToggleMobileSidebar }: TopbarProps) {
             <ChevronDown className="w-3.5 h-3.5 text-text-muted hidden md:block" />
           </button>
 
-          {/* Dropdown */}
+          {/* Dropdown with Frosted Glass */}
           {profileOpen && (
-            <div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-xl border border-border shadow-lg py-1.5 z-50 animate-fade-in">
+            <div className="absolute right-0 top-full mt-2 w-56 bg-white/90 backdrop-blur-xl rounded-xl border border-border/90 shadow-xl py-1.5 z-50 animate-fade-in">
               <div className="px-3.5 py-2 border-b border-border">
                 <p className="text-xs font-semibold text-text-primary">{userName}</p>
                 <p className="text-[11px] text-text-muted capitalize">{userRole}</p>

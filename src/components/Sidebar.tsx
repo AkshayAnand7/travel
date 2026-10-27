@@ -58,11 +58,11 @@ export default function Sidebar({
         />
       )}
 
-      {/* Sidebar */}
+      {/* Sidebar with Dark Frosted Glass */}
       <aside
         className={`
           fixed top-0 left-0 z-50 h-screen flex flex-col
-          bg-sidebar text-slate-100 transition-all duration-300 ease-in-out border-r border-slate-800/80
+          bg-[#0A0F1D]/92 backdrop-blur-xl text-slate-100 transition-all duration-300 ease-in-out border-r border-slate-800/70
           ${mobileOpen ? "translate-x-0" : "-translate-x-full"}
           lg:translate-x-0
           ${collapsed ? "lg:w-[72px]" : "lg:w-[260px]"}

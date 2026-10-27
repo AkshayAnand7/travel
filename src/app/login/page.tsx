@@ -101,9 +101,12 @@ function LoginForm() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center py-10 px-4 sm:px-6">
-      <div className="w-full max-w-md">
-        <div className="bg-white p-7 sm:p-9 rounded-2xl border border-slate-200 shadow-xl shadow-slate-900/5 relative">
+    <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center py-10 px-4 sm:px-6 relative overflow-hidden">
+      {/* Subtle ambient light glow for glassmorphism */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-400/10 rounded-full blur-3xl pointer-events-none" />
+
+      <div className="w-full max-w-md relative z-10">
+        <div className="bg-white/85 backdrop-blur-xl p-7 sm:p-9 rounded-2xl border border-white shadow-xl shadow-slate-900/5 relative">
           {/* Header */}
           <div className="mb-6 text-center">
             <div className="w-12 h-12 rounded-xl bg-slate-900 border border-slate-800 shadow-md mb-3 mx-auto flex items-center justify-center text-white">
