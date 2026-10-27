@@ -136,6 +136,8 @@ export function getFriendlyAuthErrorMessage(error: unknown): string {
       return 'An account with this email address already exists.'
     case 'auth/weak-password':
       return 'Password should be at least 6 characters long.'
+    case 'auth/operation-not-allowed':
+      return 'Email/Password sign-in is currently disabled in your Firebase project. Please enable it in Firebase Console → Authentication → Sign-in method.'
     case 'auth/network-request-failed':
       return 'Network connection error. Please check your internet connectivity.'
     default:
