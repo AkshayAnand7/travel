@@ -150,7 +150,7 @@ function LoginForm() {
                   <input
                     type="text"
                     required
-                    placeholder="e.g. admin@rkenterprise.com or JAGAN"
+                    placeholder="Enter your user ID or email"
                     value={resetEmail}
                     onChange={(e) => setResetEmail(e.target.value)}
                     className="w-full h-10.5 pl-10 pr-3 bg-white border border-slate-300 rounded-lg text-sm font-medium focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
@@ -189,7 +189,7 @@ function LoginForm() {
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Jagan Anand"
+                    placeholder="Enter your full name"
                     value={displayName}
                     onChange={(e) => setDisplayName(e.target.value)}
                     className="w-full h-10.5 pl-10 pr-3 bg-white border border-slate-300 rounded-lg text-sm font-medium focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
@@ -206,7 +206,7 @@ function LoginForm() {
                   <input
                     type="text"
                     required
-                    placeholder="e.g. JAGAN or admin@rkenterprise.com"
+                    placeholder="Enter your user ID or email"
                     value={userId}
                     onChange={(e) => setUserId(e.target.value)}
                     className="w-full h-10.5 pl-10 pr-3 bg-white border border-slate-300 rounded-lg text-sm font-medium focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
@@ -271,7 +271,7 @@ function LoginForm() {
                   <input
                     type="text"
                     required
-                    placeholder="e.g. JAGAN"
+                    placeholder="Enter your user ID or email"
                     value={userId}
                     onChange={(e) => setUserId(e.target.value)}
                     className="w-full h-10.5 pl-10 pr-3 bg-white border border-slate-300 rounded-lg text-sm font-medium focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all uppercase"

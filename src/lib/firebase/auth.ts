@@ -25,7 +25,7 @@ export function clearSessionCookie() {
 }
 
 /**
- * Normalizes input: if user entered a username (e.g. JAGAN) instead of email,
+ * Normalizes input: if user entered a username instead of email,
  * checks Firestore users collection or constructs user email.
  */
 async function resolveLoginEmail(identifier: string): Promise<string> {
