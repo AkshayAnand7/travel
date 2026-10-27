@@ -200,20 +200,25 @@ export default function VehiclesClient({ initialVehicles }: VehiclesClientProps)
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left: Add/Edit Vehicle Form */}
         <div className="lg:col-span-5 card">
-          <div className="flex items-center justify-between pb-4 border-b border-border mb-4">
-            <div>
-              <h2 className="text-base font-bold text-text-primary">
-                {editingVehicleId ? "Edit Vehicle Details" : "Add Vehicle to Fleet"}
-              </h2>
-              <p className="text-xs text-text-secondary mt-0.5">
-                {editingVehicleId ? "Modify vehicle parameters" : "Register a new vehicle with documents"}
-              </p>
+          <div className="flex items-center justify-between pb-4 border-b border-border/80 mb-5">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 text-white flex items-center justify-center shadow-md shadow-blue-500/20 shrink-0">
+                <Car className="w-5 h-5" />
+              </div>
+              <div>
+                <h2 className="text-base font-bold text-slate-900 tracking-tight">
+                  {editingVehicleId ? "Edit Vehicle Details" : "Add Vehicle to Fleet"}
+                </h2>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  {editingVehicleId ? "Modify vehicle parameters & compliance" : "Register a new vehicle with documents"}
+                </p>
+              </div>
             </div>
             {editingVehicleId && (
               <button
                 type="button"
                 onClick={handleCancelEdit}
-                className="btn btn-secondary py-1 px-2.5 text-xs text-danger"
+                className="btn btn-secondary py-1 px-3 text-xs text-rose-600 hover:text-rose-700"
               >
                 <X className="w-3.5 h-3.5 mr-1" />
                 Cancel
@@ -312,13 +317,16 @@ export default function VehiclesClient({ initialVehicles }: VehiclesClientProps)
             </div>
 
             {/* Document Expiry Dates */}
-            <div className="p-3 bg-slate-50 rounded-xl border border-border/80 space-y-3">
-              <span className="text-[11px] font-bold text-text-secondary uppercase tracking-wider block">
-                Compliance & Documents Expiry
-              </span>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+            <div className="form-inset space-y-3">
+              <div className="flex items-center gap-1.5 text-blue-700">
+                <ShieldAlert className="w-3.5 h-3.5" />
+                <span className="text-[11px] font-bold uppercase tracking-wider">
+                  Compliance & Documents Expiry
+                </span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                 <div>
-                  <label className="text-[11px] text-text-muted">Insurance</label>
+                  <label className="text-[11px] font-medium text-slate-500 mb-1 block">Insurance</label>
                   <input
                     type="date"
                     className="input text-xs"
@@ -327,7 +335,7 @@ export default function VehiclesClient({ initialVehicles }: VehiclesClientProps)
                   />
                 </div>
                 <div>
-                  <label className="text-[11px] text-text-muted">Permit</label>
+                  <label className="text-[11px] font-medium text-slate-500 mb-1 block">Permit</label>
                   <input
                     type="date"
                     className="input text-xs"
@@ -336,7 +344,7 @@ export default function VehiclesClient({ initialVehicles }: VehiclesClientProps)
                   />
                 </div>
                 <div>
-                  <label className="text-[11px] text-text-muted">Pollution (PUC)</label>
+                  <label className="text-[11px] font-medium text-slate-500 mb-1 block">Pollution (PUC)</label>
                   <input
                     type="date"
                     className="input text-xs"
@@ -375,9 +383,21 @@ export default function VehiclesClient({ initialVehicles }: VehiclesClientProps)
             <button
               type="submit"
               disabled={loading}
-              className="btn btn-primary w-full py-3 shadow-md justify-center"
+              className="btn btn-primary w-full h-11 text-sm font-semibold justify-center shadow-md shadow-blue-500/25"
             >
-              {loading ? "Saving Vehicle..." : editingVehicleId ? "Update Vehicle Record" : "Save Vehicle to Fleet"}
+              {loading ? (
+                "Saving Vehicle..."
+              ) : editingVehicleId ? (
+                <>
+                  <Check className="w-4 h-4" />
+                  Update Vehicle Record
+                </>
+              ) : (
+                <>
+                  <Car className="w-4 h-4" />
+                  Save Vehicle to Fleet
+                </>
+              )}
             </button>
           </form>
         </div>

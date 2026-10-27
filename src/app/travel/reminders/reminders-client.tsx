@@ -201,12 +201,17 @@ export default function RemindersClient({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left: Add Reminder Form */}
         <div className="lg:col-span-5 card">
-          <div className="flex items-center justify-between pb-4 border-b border-border mb-4">
-            <div>
-              <h2 className="text-base font-bold text-text-primary">Add Reminder</h2>
-              <p className="text-xs text-text-secondary mt-0.5">
-                Schedule maintenance, document renewal, or driver reminders
-              </p>
+          <div className="flex items-center justify-between pb-4 border-b border-border/80 mb-5">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-600 text-white flex items-center justify-center shadow-md shadow-purple-500/20 shrink-0">
+                <Bell className="w-5 h-5" />
+              </div>
+              <div>
+                <h2 className="text-base font-bold text-slate-900 tracking-tight">Add Reminder</h2>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Schedule maintenance, document renewal, or driver reminders
+                </p>
+              </div>
             </div>
           </div>
 
@@ -319,9 +324,16 @@ export default function RemindersClient({
             <button
               type="submit"
               disabled={loading}
-              className="btn btn-primary w-full py-3 shadow-md justify-center"
+              className="btn btn-primary w-full h-11 text-sm font-semibold justify-center shadow-md shadow-blue-500/25"
             >
-              {loading ? "Scheduling..." : "Create Reminder"}
+              {loading ? (
+                "Scheduling..."
+              ) : (
+                <>
+                  <Bell className="w-4 h-4" />
+                  Create Reminder
+                </>
+              )}
             </button>
           </form>
         </div>

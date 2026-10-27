@@ -173,24 +173,29 @@ export default function SettingsClient({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left: Admin Settings & Backup */}
         <div className="lg:col-span-6 card space-y-5">
-          <div className="pb-3 border-b border-border">
-            <h2 className="text-base font-bold text-text-primary">Admin Settings & Backup</h2>
-            <p className="text-xs text-text-secondary mt-0.5">
-              Secure export and disaster recovery tooling
-            </p>
+          <div className="flex items-center gap-3 pb-4 border-b border-border/80">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 text-white flex items-center justify-center shadow-md shadow-blue-500/20 shrink-0">
+              <Database className="w-5 h-5" />
+            </div>
+            <div>
+              <h2 className="text-base font-bold text-slate-900 tracking-tight">Admin Settings & Backup</h2>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Secure export and disaster recovery tooling
+              </p>
+            </div>
           </div>
 
           {/* Export JSON */}
-          <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl flex items-center justify-between gap-4">
+          <div className="form-inset flex items-center justify-between gap-4">
             <div>
-              <h3 className="font-semibold text-xs text-text-primary">Export JSON Backup</h3>
-              <p className="text-[11px] text-text-secondary mt-0.5">
+              <h3 className="font-semibold text-xs text-slate-900">Export JSON Backup</h3>
+              <p className="text-[11px] text-slate-500 mt-0.5">
                 Download all trips, vehicles, payments, and reminders in structured JSON.
               </p>
             </div>
             <button
               onClick={handleExportBackup}
-              className="btn btn-primary py-2 px-3 text-xs shrink-0 shadow-sm inline-flex items-center gap-1.5"
+              className="btn btn-primary py-2 px-3.5 text-xs shrink-0 shadow-md shadow-blue-500/25 inline-flex items-center gap-1.5"
             >
               <Download className="w-4 h-4" />
               <span>Export</span>
@@ -198,15 +203,15 @@ export default function SettingsClient({
           </div>
 
           {/* Import JSON */}
-          <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-3">
+          <div className="form-inset space-y-3">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="font-semibold text-xs text-text-primary">Import Backup File</h3>
-                <p className="text-[11px] text-text-secondary mt-0.5">
+                <h3 className="font-semibold text-xs text-slate-900">Import Backup File</h3>
+                <p className="text-[11px] text-slate-500 mt-0.5">
                   Verify and restore system collections from a previous JSON backup.
                 </p>
               </div>
-              <label className="btn btn-secondary py-2 px-3 text-xs shrink-0 cursor-pointer inline-flex items-center gap-1.5">
+              <label className="btn btn-secondary py-2 px-3.5 text-xs shrink-0 cursor-pointer inline-flex items-center gap-1.5">
                 <Upload className="w-4 h-4" />
                 <span>Select File</span>
                 <input
@@ -225,7 +230,7 @@ export default function SettingsClient({
           </div>
 
           {/* Danger Zone */}
-          <div className="p-4 bg-rose-50/60 border border-rose-200 rounded-2xl space-y-2">
+          <div className="p-4 bg-rose-50/70 border border-rose-200/90 rounded-2xl space-y-2">
             <div className="flex items-center gap-2 text-rose-800">
               <AlertTriangle className="w-4 h-4 text-rose-600" />
               <h3 className="font-bold text-xs uppercase tracking-wider">Danger Zone</h3>
@@ -235,7 +240,7 @@ export default function SettingsClient({
             </p>
             <button
               onClick={handleClearData}
-              className="btn bg-rose-600 hover:bg-rose-700 text-white py-1.5 px-3 text-xs shadow-sm inline-flex items-center gap-1.5 mt-2"
+              className="btn btn-danger py-2 px-3.5 text-xs shadow-md shadow-rose-500/25 inline-flex items-center gap-1.5 mt-2"
             >
               <Trash2 className="w-3.5 h-3.5" />
               <span>Clear Application Data</span>
@@ -245,52 +250,57 @@ export default function SettingsClient({
 
         {/* Right: Account Information & App Preferences */}
         <div className="lg:col-span-6 card space-y-5">
-          <div className="pb-3 border-b border-border">
-            <h2 className="text-base font-bold text-text-primary">Account & Preferences</h2>
-            <p className="text-xs text-text-secondary mt-0.5">
-              Operating company identity and regional formats
-            </p>
+          <div className="flex items-center gap-3 pb-4 border-b border-border/80">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white flex items-center justify-center shadow-md shadow-emerald-500/20 shrink-0">
+              <Shield className="w-5 h-5" />
+            </div>
+            <div>
+              <h2 className="text-base font-bold text-slate-900 tracking-tight">Account & Preferences</h2>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Operating company identity and regional formats
+              </p>
+            </div>
           </div>
 
           <div className="space-y-3 text-xs">
-            <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
-              <span className="text-[10px] font-bold text-text-muted uppercase tracking-wider block">
+            <div className="form-inset space-y-2">
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
                 Business Profile
               </span>
               <div className="flex justify-between py-1 border-b border-slate-200/60">
-                <span className="text-text-secondary">Application Name:</span>
-                <span className="font-semibold text-text-primary">RK Travel Hub</span>
+                <span className="text-slate-600">Application Name:</span>
+                <span className="font-semibold text-slate-900">RK Travel Hub</span>
               </div>
               <div className="flex justify-between py-1 border-b border-slate-200/60">
-                <span className="text-text-secondary">Operating Business:</span>
-                <span className="font-semibold text-text-primary">RK Enterprise</span>
+                <span className="text-slate-600">Operating Business:</span>
+                <span className="font-semibold text-slate-900">RK Enterprise</span>
               </div>
               <div className="flex justify-between py-1">
-                <span className="text-text-secondary">Headquarters:</span>
-                <span className="font-semibold text-text-primary">Pune, Maharashtra, India</span>
+                <span className="text-slate-600">Headquarters:</span>
+                <span className="font-semibold text-slate-900">Pune, Maharashtra, India</span>
               </div>
             </div>
 
-            <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
-              <span className="text-[10px] font-bold text-text-muted uppercase tracking-wider block">
+            <div className="form-inset space-y-2">
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
                 Regional & Formatting Standards
               </span>
               <div className="flex justify-between py-1 border-b border-slate-200/60">
-                <span className="text-text-secondary">Primary Currency:</span>
-                <span className="font-semibold text-text-primary">Indian Rupee (INR — ₹)</span>
+                <span className="text-slate-600">Primary Currency:</span>
+                <span className="font-semibold text-slate-900">Indian Rupee (INR — ₹)</span>
               </div>
               <div className="flex justify-between py-1 border-b border-slate-200/60">
-                <span className="text-text-secondary">Date Format:</span>
-                <span className="font-semibold font-mono text-text-primary">DD/MM/YYYY</span>
+                <span className="text-slate-600">Date Format:</span>
+                <span className="font-semibold font-mono text-slate-900">DD/MM/YYYY</span>
               </div>
               <div className="flex justify-between py-1">
-                <span className="text-text-secondary">Time Zone:</span>
-                <span className="font-semibold text-text-primary">Asia/Kolkata (IST — UTC+5:30)</span>
+                <span className="text-slate-600">Time Zone:</span>
+                <span className="font-semibold text-slate-900">Asia/Kolkata (IST — UTC+5:30)</span>
               </div>
             </div>
 
-            <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
-              <span className="text-[10px] font-bold text-text-muted uppercase tracking-wider block">
+            <div className="form-inset space-y-2">
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
                 Session Identity
               </span>
               <div className="flex justify-between py-1 border-b border-slate-200/60">
