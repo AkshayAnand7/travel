@@ -1,15 +1,15 @@
-import StaffLayout from "@/components/StaffLayout";
-import { getTravelAnalytics } from "./actions";
-import AnalyticsDashboardClient from "./analytics-dashboard-client";
+import { getDashboardData } from "@/services/dashboard.service";
+import DashboardClient from "./DashboardClient";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default async function TravelDashboardPage() {
-  const analyticsData = await getTravelAnalytics();
+  const { metrics, recentTrips } = await getDashboardData();
 
   return (
-    <StaffLayout shopName="Analytics Overview">
-      <AnalyticsDashboardClient data={analyticsData} />
-    </StaffLayout>
+    <DashboardClient
+      initialMetrics={metrics}
+      initialTrips={recentTrips}
+    />
   );
 }
